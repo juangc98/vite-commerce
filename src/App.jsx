@@ -2,15 +2,24 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import Navbar from './components/Navbar.jsx'
+import ItemListContainer from './components/ItemListContainer.jsx'
 import Button from './components/Button.jsx'
 import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const toggleCartDrawer = () => {
+    setIsCartOpen(!isCartOpen);
+    console.log("clicked", isCartOpen);
+  };
 
   return (
     <>
-      <Navbar />
+      <Navbar isCartOpen={isCartOpen} toggleDrawer={toggleCartDrawer} />
+      <div className='mt-24 container'>
+        <ItemListContainer title="First title" btn="First button" />
+      </div>
       <div>
         <a href="https://vitejs.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />

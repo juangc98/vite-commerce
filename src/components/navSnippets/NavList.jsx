@@ -2,16 +2,16 @@ import React from 'react'
 
 const NavList = () => {
   return (
-    <div>
-        <ul className='flex flex-col lg:flex-row flex-nowrap gap-2'>
+    <div className='flex flex-shrink-0'>
+        <ul className='flex flex-col lg:flex-row flex-nowrap gap-2 text-black'>
             <li>
-                <a href="">Link 1</a>
+                <a href="" className='text-black'>Link 1</a>
             </li>
             <li>
-                <a href="">Link 2</a>
+                <a href="" className='text-black'>Link 2</a>
             </li>
             <li>
-                <a href="">Link 3</a>
+                <a href="" className='text-black'>Link 3</a>
             </li>
         </ul>
     </div>
