@@ -15,11 +15,7 @@ const Navbar = (props) => {
               <NavList  />
             </div>
         </div>
-        <button onClick={props.toggleDrawer} isCartOpen={props.isCartOpen} className='btn cart-btn bg-black bg-opacity-30 p-1'>
-          <img src={icon} className="basket w-8 h-8" alt="Basket icon" />
-        </button>
         <CartWidget isCartOpen={props.isCartOpen} toggleDrawer={props.toggleDrawer} />
-        
     </header>
   )
 }

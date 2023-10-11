@@ -22,9 +22,8 @@ function App() {
   return (
     <>
       <Navbar isCartOpen={isCartOpen} toggleDrawer={toggleCartDrawer} isMenuOpen={isMenuOpen} toggleMenu={toggleMenuDrawer} />
-      <div className='mt-24 fluid-container h-screen'>
-        <h1>Vite + React</h1>
-        <ItemListContainer title="First title" btn="First button" />
+      <div className='mt-24'>
+        <ItemListContainer title="Indumentaria" />
       </div>
       <Footer />
     </>
