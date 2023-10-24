@@ -11,12 +11,11 @@ const ItemList = ({products}) => {
         <Swiper
         className='mySwiper item-list-carousel'
         slidesPerView={'auto'}
-        loop={true}
         grabCursor={true}
         centeredSlides={true}
         onSwiper={(swiper) => console.log(swiper)}
         >
-            { products.map((item, index) =>  <SwiperSlide><Item key={index} product={item} /></SwiperSlide> )}
+            { products.map((item, index) =>  <SwiperSlide key={index}><Item key={index} product={item} /></SwiperSlide> )}
         </Swiper>
     </>
         

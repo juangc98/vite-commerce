@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const ItemCount = ({stock, initial, onAdd, productId}) => {
+const ItemCount = ({stock, size, initial, onAdd, productId}) => {
     const [qty, setQty] = useState(initial)
     const [isAvailable] = useState( stock >= 1 ? true : false)
 
@@ -19,7 +19,7 @@ const ItemCount = ({stock, initial, onAdd, productId}) => {
         }
     }
     function addToCart(id, amount) {
-        console.log("añadir:" + amount + " del producto: " + id)
+        console.log("añadir:" + amount + " del producto: " + id + " talle " + size)
     }
 
     if ( isAvailable) {
