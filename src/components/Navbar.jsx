@@ -3,7 +3,7 @@ import NavList from './navSnippets/NavList.jsx'
 import Logo from './navSnippets/Logo.jsx'
 import CartWidget from './navSnippets/CartWidget.jsx'
 import MobileMenu from './navSnippets/MobileMenu.jsx'
-import icon from '../assets/basket.svg'
+import '../App.css'
 const Navbar = (props) => {
   
   return (

@@ -47,6 +47,13 @@
   }
 }
 
+a {
+  color: black;
+}
+a:active {
+  text-decoration: underline;
+}
+
 .card {
   padding: 2em;
 }
@@ -113,4 +120,28 @@
 .product-card .atc-btn:disabled:hover {
   outline: none;
   border: 0;
+}
+
+/**/
+.size-picker-wrapper .input-group {
+  cursor: pointer;
+}
+
+.size-picker-wrapper .input-group input + label {
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  padding: 8px;
+  font-size: 1rem;
+  font-weight: 400;
+  border-radius: 6px;
+  width: 2.5rem;
+  display: flex;
+  height: 2.5rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.size-picker-wrapper .input-group input:checked + label, .size-picker-wrapper .input-group input[checked] + label {
+  border: 1px solid white;
+  font-weight: bold;
 }
