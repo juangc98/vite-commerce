@@ -26,7 +26,7 @@ const ProductDetails = ({product}) => {
 
   return (
     <>
-      <article className='product-section-wrapper fluid-container relative h-full mx-auto product-detail group grid md:grid-cols-2 gap-10 w-full text-white mb-14'>
+      <article className='product-section-wrapper  relative h-full mx-auto product-detail group grid md:grid-cols-2 gap-10 w-full text-white mb-14'>
         <div className='media-grid grid grid-cols-2 gap-6'>
           <div className='img-wrapper col-span-2 flex h-[60vh] md:h-[80vh] bg-white p-4 rounded-lg smooth '>
             <img className='w-full object-contain object-center transform smooth' src={`${featuredImage.data.attributes.url}`} alt={ title } />

@@ -22,8 +22,7 @@ const ProductPage = ({ products }) => {
     return <ErrorPage />;
   } else {
     return (
-      <div className=''>
-        <div>Breadcrumb</div>
+      <div className='fluid-container'>
         <ProductDetails product={product} />
       </div>
     );
