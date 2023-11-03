@@ -1,55 +1,33 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
+import ErrorPage from './ErrorPage.jsx'
 import ProductDetails from '../components/ProductDetails'
-
 const apiUrl = import.meta.env.VITE_API_URL;
 
-const ProductPage = () => {
-  const { id } = useParams()
-  const [count, setCount] = useState(0)
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
+const ProductPage = ({ products }) => {
+  const { slug } = useParams();
+  const [product, setProduct] = useState(null);
 
-  const getData = () => {
-    /*return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        setLoading(true);
-        resolve(storeData);
-      }, 2000);
-    })
-    ?&populate=featuredImage&populate[0]=Inventory
-    */
-    fetch(apiUrl + '/api/products/' + id )
-        .then(res => {
-          return res.json();
-        })
-        .then(json => {
-          setData(json.data);
-        })
-        .catch(err => {
-          console.log(err);
-        })
-        .finally(() => {
-          setLoading(false);
-        })
-  }
   useEffect(() => {
-    getData()
-      //.then(res => {
-      //  setData(res.shirts);
-      //  // console.log(res.shirts);
-      //  setLoading(false);
-      //})
-    }, []);
-      
-  return (
-    <div className='mt-24'>
-      <h1>ProductPage</h1>
-      <p>ID: {id}</p>
-      <ProductDetails />
-    </div>
-  )
-}
+    //console.log( slug )
+    const myProduct = products.find(product => product.attributes.slug === slug);
+    //console.log( products )
+    if (myProduct) {
+      setProduct(myProduct);
+    }
+  }, [products, slug]);
 
-export default ProductPage
+  if (!product) {
+    return <ErrorPage />;
+  } else {
+    return (
+      <div className=''>
+        <div>Breadcrumb</div>
+        <ProductDetails product={product} />
+      </div>
+    );
+  }
+};
+
+export default ProductPage;       

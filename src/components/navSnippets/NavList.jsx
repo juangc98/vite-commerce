@@ -2,18 +2,18 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom';
 const apiUrl = import.meta.env.VITE_API_URL;
-const NavList = () => {
+const NavList = ({categories}) => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
   
-    const getData = () => {
-      /*return new Promise((resolve, reject) => {
+    /*const getData = () => {
+      return new Promise((resolve, reject) => {
         setTimeout(() => {
           setLoading(true);
           resolve(storeData);
         }, 2000);
       })
-      */
+      
       fetch(apiUrl + '/api/products?&populate=featuredImage&populate[0]=Inventory')
          .then(res => {
            return res.json();
@@ -36,16 +36,20 @@ const NavList = () => {
         //  // console.log(res.shirts);
         //  setLoading(false);
         //})
-      }, []);
+      }, []);*/
   return (
     <>
         <div className='flex flex-shrink-0'>
             <ul className='flex flex-col md:flex-row flex-nowrap gap-2 text-black'>
+              {categories.map((category, index) => {
+                return (
+                  <li key={index}>
+                    <Link to={`/categoria/${category.attributes.slug}`} >{category.attributes.title}</Link>
+                  </li>
+                );
+              })}
                 <li>
-                    <Link to="/">Link 1</Link>
-                </li>
-                <li>
-                    <Link to="/contacto">Contacto</Link>
+                    <Link to="/contacto" >Contacto</Link>
                 </li>
             </ul>
         </div>

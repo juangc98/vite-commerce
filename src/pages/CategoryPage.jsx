@@ -1,18 +1,42 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
+import ErrorPage from './ErrorPage.jsx'
 import ItemListContainer from '../components/ItemListContainer.jsx'
 import '../App.css'
 
-const CategoryPage = ({data}) => {
-    const [count, setCount] = useState(0)
-    const [loading, setLoading] = useState(true);
-  return (
-    <>
-      <div className='mt-24'>
-        <ItemListContainer title="Indumentaria" products={data.filter(item => item.attributes.Category == "Indumentaria")} />
+const CategoryPage = ({ categories, products }) => {
+  const { slug } = useParams();
+  const [category, setCategory] = useState(null);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+
+  useEffect(() => {
+    const myCategory = categories.find(cat => cat.attributes.slug === slug);
+
+    if (myCategory) {
+      setCategory(myCategory);
+      const categoryProducts = products.filter(product => product.attributes.categoryID === myCategory.id);
+      setFilteredProducts(categoryProducts);
+    }
+  }, [categories, products, slug]);
+
+  
+  if (!category) {
+    // Manejo para cuando no se encuentra la categoría
+    return (
+      <ErrorPage />
+    );
+  } else {
+    return (
+      <div className=''>
+        <ItemListContainer
+          key={category.id}
+          title={category.attributes.title}
+          products={filteredProducts}
+        />
       </div>
-    </>
-  )
-}
+    );
+  }
+};
 
 export default CategoryPage

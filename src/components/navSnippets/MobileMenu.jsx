@@ -9,7 +9,7 @@ const MobileMenu = (props) => {
         <aside className={`fixed  inset-0 z-10 w-full h-screen p-4 bg-black flex-col ${props.isMenuOpen ? 'flex' : 'hidden'}`}>
             <button onClick={props.toggleMenu} className='text-white'>Close</button>
             <Logo />
-            <NavList />
+            <NavList categories={props.categories} />
         </aside>
     </div>
   )

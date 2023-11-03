@@ -1,30 +1,9 @@
 export const storeData = {
   "categories": [{
-    "id": 1,
-    "attributes": {
-      "Title": "Accesorios",
-      "createdAt": "2023-11-02T19:23:37.084Z",
-      "updatedAt": "2023-11-02T20:04:04.833Z",
-      "publishedAt": "2023-11-02T19:23:37.889Z",
-      "products": {
-        "data": [{
-          "id": 5,
-          "attributes": {
-            "Title": "Canilleras",
-            "Description": "Canilleras ",
-            "Price": 2200,
-            "comparePrice": 2400,
-            "createdAt": "2023-10-27T18:38:54.501Z",
-            "updatedAt": "2023-11-02T19:34:24.929Z",
-            "publishedAt": "2023-10-27T18:38:56.195Z"
-          }
-        }]
-      }
-    }
-  }, {
     "id": 2,
     "attributes": {
-      "Title": "Indumentaria",
+      "title": "indumentaria",
+      "slug": "indumentaria",
       "createdAt": "2023-11-02T19:23:53.749Z",
       "updatedAt": "2023-11-02T20:04:16.071Z",
       "publishedAt": "2023-11-02T19:23:54.396Z",
@@ -32,10 +11,10 @@ export const storeData = {
         "data": [{
           "id": 2,
           "attributes": {
-            "Title": "Azzurri",
-            "Description": "Camiseta azul en honor al Inter de Milán, con detalles en dorado y un diseño que juega con distintos tonos de azules. Numero en el pecho, y el nombre en vertical. Un diseño muy original. Combina con short negro o blanco.",
-            "Price": 92.5,
-            "comparePrice": 120,
+            "title": "Azzurri",
+            "description": "Camiseta azul en honor al Inter de Milán, con detalles en dorado y un diseño que juega con distintos tonos de azules. Numero en el pecho, y el nombre en vertical. Un diseño muy original. Combina con short negro o blanco.",
+            "price": 92.5,
+            "compareprice": 120,
             "createdAt": "2023-10-11T23:28:19.349Z",
             "updatedAt": "2023-11-02T19:34:01.136Z",
             "publishedAt": "2023-10-11T23:37:19.931Z"
@@ -43,10 +22,10 @@ export const storeData = {
         }, {
           "id": 1,
           "attributes": {
-            "Title": "Black Munich",
-            "Description": "Una cómoda camiseta de cuello en V en color negro, en honor al gran Bayern Munich. Hecha de un tejido suave y ligero, esta camiseta es una opción original con mucho estilo.",
-            "Price": 88,
-            "comparePrice": 95.5,
+            "title": "Black Munich",
+            "description": "Una cómoda camiseta de cuello en V en color negro, en honor al gran Bayern Munich. Hecha de un tejido suave y ligero, esta camiseta es una opción original con mucho estilo.",
+            "price": 88,
+            "compareprice": 95.5,
             "createdAt": "2023-10-11T23:10:24.642Z",
             "updatedAt": "2023-11-02T19:34:09.593Z",
             "publishedAt": "2023-10-11T23:37:19.931Z"
@@ -54,10 +33,10 @@ export const storeData = {
         }, {
           "id": 3,
           "attributes": {
-            "Title": "Borussia",
-            "Description": "Camiseta negra y amarilla, uno de los primeros modelos de Calcio. Muy linda. Cuello redondo. Dorsal y nombre en la espalda. ",
-            "Price": 65,
-            "comparePrice": 78,
+            "title": "Borussia",
+            "description": "Camiseta negra y amarilla, uno de los primeros modelos de Calcio. Muy linda. Cuello redondo. Dorsal y nombre en la espalda. ",
+            "price": 65,
+            "compareprice": 78,
             "createdAt": "2023-10-11T23:30:21.492Z",
             "updatedAt": "2023-11-02T19:34:19.598Z",
             "publishedAt": "2023-10-11T23:37:19.931Z"
@@ -65,13 +44,36 @@ export const storeData = {
         }, {
           "id": 4,
           "attributes": {
-            "Title": "Rossoneri ",
-            "Description": "La del Milan, rojinegra. Un diseño clásico de la liga italiana. ",
-            "Price": 69.5,
-            "comparePrice": 84,
+            "title": "Rossoneri ",
+            "description": "La del Milan, rojinegra. Un diseño clásico de la liga italiana. ",
+            "price": 69.5,
+            "compareprice": 84,
             "createdAt": "2023-10-11T23:33:13.531Z",
             "updatedAt": "2023-10-31T23:16:29.702Z",
             "publishedAt": "2023-10-11T23:37:19.931Z"
+          }
+        }]
+      }
+    }
+  }, {
+    "id": 1,
+    "attributes": {
+      "title": "accesorios",
+      "slug": "accesorios",
+      "createdAt": "2023-11-02T19:23:37.084Z",
+      "updatedAt": "2023-11-02T20:04:04.833Z",
+      "publishedAt": "2023-11-02T19:23:37.889Z",
+      "products": {
+        "data": [{
+          "id": 5,
+          "attributes": {
+            "title": "Canilleras",
+            "description": "Canilleras ",
+            "price": 2200,
+            "compareprice": 2400,
+            "createdAt": "2023-10-27T18:38:54.501Z",
+            "updatedAt": "2023-11-02T19:34:24.929Z",
+            "publishedAt": "2023-10-27T18:38:56.195Z"
           }
         }]
       }
@@ -80,10 +82,12 @@ export const storeData = {
   "products": [{
     "id": 1,
     "attributes": {
-      "Title": "Black Munich",
-      "Description": "Una cómoda camiseta de cuello en V en color negro, en honor al gran Bayern Munich. Hecha de un tejido suave y ligero, esta camiseta es una opción original con mucho estilo.",
-      "Price": 88,
-      "comparePrice": 95.5,
+      "title": "Black Munich",
+      "slug": "black-munich",
+      "description": "Una cómoda camiseta de cuello en V en color negro, en honor al gran Bayern Munich. Hecha de un tejido suave y ligero, esta camiseta es una opción original con mucho estilo.",
+      "price": 88,
+      "compareprice": 95.5,
+      "categoryID": 2,
       "createdAt": "2023-10-11T23:10:24.642Z",
       "updatedAt": "2023-11-02T19:34:09.593Z",
       "publishedAt": "2023-10-11T23:37:19.931Z",
@@ -146,7 +150,7 @@ export const storeData = {
             "ext": ".jpeg",
             "mime": "image/jpeg",
             "size": 1453.72,
-            "url": "/uploads/shirt_black_e07d84bf4b.jpeg",
+            "url": "/imgs/shirt_black.jpeg",
             "previewUrl": null,
             "provider": "local",
             "provider_metadata": null,
@@ -156,7 +160,140 @@ export const storeData = {
         }
       },
       "Media": {
-        "data": null
+        "data": [
+          {
+            "id": 2,
+            "attributes": {
+              "name": "shirt_black.jpeg",
+              "alternativeText": null,
+              "caption": null,
+              "width": 6602,
+              "height": 4000,
+              "formats": {
+                "thumbnail": {
+                  "name": "thumbnail_shirt_black.jpeg",
+                  "hash": "thumbnail_shirt_black_e07d84bf4b",
+                  "ext": ".jpeg",
+                  "mime": "image/jpeg",
+                  "path": null,
+                  "width": 245,
+                  "height": 148,
+                  "size": 6.27,
+                  "url": "/uploads/thumbnail_shirt_black_e07d84bf4b.jpeg"
+                },
+                "medium": {
+                  "name": "medium_shirt_black.jpeg",
+                  "hash": "medium_shirt_black_e07d84bf4b",
+                  "ext": ".jpeg",
+                  "mime": "image/jpeg",
+                  "path": null,
+                  "width": 750,
+                  "height": 455,
+                  "size": 31.3,
+                  "url": "/uploads/medium_shirt_black_e07d84bf4b.jpeg"
+                },
+                "small": {
+                  "name": "small_shirt_black.jpeg",
+                  "hash": "small_shirt_black_e07d84bf4b",
+                  "ext": ".jpeg",
+                  "mime": "image/jpeg",
+                  "path": null,
+                  "width": 500,
+                  "height": 303,
+                  "size": 16.66,
+                  "url": "/uploads/small_shirt_black_e07d84bf4b.jpeg"
+                },
+                "large": {
+                  "name": "large_shirt_black.jpeg",
+                  "hash": "large_shirt_black_e07d84bf4b",
+                  "ext": ".jpeg",
+                  "mime": "image/jpeg",
+                  "path": null,
+                  "width": 1000,
+                  "height": 606,
+                  "size": 52.29,
+                  "url": "/uploads/large_shirt_black_e07d84bf4b.jpeg"
+                }
+              },
+              "hash": "shirt_black_e07d84bf4b",
+              "ext": ".jpeg",
+              "mime": "image/jpeg",
+              "size": 1453.72,
+              "url": "/imgs/shirt_black.jpeg",
+              "previewUrl": null,
+              "provider": "local",
+              "provider_metadata": null,
+              "createdAt": "2023-10-11T23:09:47.936Z",
+              "updatedAt": "2023-10-11T23:09:47.936Z"
+            }
+          },
+          {
+            "id": 2,
+            "attributes": {
+              "name": "shirt_black.jpeg",
+              "alternativeText": null,
+              "caption": null,
+              "width": 6602,
+              "height": 4000,
+              "formats": {
+                "thumbnail": {
+                  "name": "thumbnail_shirt_black.jpeg",
+                  "hash": "thumbnail_shirt_black_e07d84bf4b",
+                  "ext": ".jpeg",
+                  "mime": "image/jpeg",
+                  "path": null,
+                  "width": 245,
+                  "height": 148,
+                  "size": 6.27,
+                  "url": "/uploads/thumbnail_shirt_black_e07d84bf4b.jpeg"
+                },
+                "medium": {
+                  "name": "medium_shirt_black.jpeg",
+                  "hash": "medium_shirt_black_e07d84bf4b",
+                  "ext": ".jpeg",
+                  "mime": "image/jpeg",
+                  "path": null,
+                  "width": 750,
+                  "height": 455,
+                  "size": 31.3,
+                  "url": "/uploads/medium_shirt_black_e07d84bf4b.jpeg"
+                },
+                "small": {
+                  "name": "small_shirt_black.jpeg",
+                  "hash": "small_shirt_black_e07d84bf4b",
+                  "ext": ".jpeg",
+                  "mime": "image/jpeg",
+                  "path": null,
+                  "width": 500,
+                  "height": 303,
+                  "size": 16.66,
+                  "url": "/uploads/small_shirt_black_e07d84bf4b.jpeg"
+                },
+                "large": {
+                  "name": "large_shirt_black.jpeg",
+                  "hash": "large_shirt_black_e07d84bf4b",
+                  "ext": ".jpeg",
+                  "mime": "image/jpeg",
+                  "path": null,
+                  "width": 1000,
+                  "height": 606,
+                  "size": 52.29,
+                  "url": "/uploads/large_shirt_black_e07d84bf4b.jpeg"
+                }
+              },
+              "hash": "shirt_black_e07d84bf4b",
+              "ext": ".jpeg",
+              "mime": "image/jpeg",
+              "size": 1453.72,
+              "url": "/imgs/shirt_black.jpeg",
+              "previewUrl": null,
+              "provider": "local",
+              "provider_metadata": null,
+              "createdAt": "2023-10-11T23:09:47.936Z",
+              "updatedAt": "2023-10-11T23:09:47.936Z"
+            }
+          }
+        ]
       },
       "Inventory": [{
         "id": 1,
@@ -171,10 +308,12 @@ export const storeData = {
   }, {
     "id": 2,
     "attributes": {
-      "Title": "Azzurri",
-      "Description": "Camiseta azul en honor al Inter de Milán, con detalles en dorado y un diseño que juega con distintos tonos de azules. Numero en el pecho, y el nombre en vertical. Un diseño muy original. Combina con short negro o blanco.",
-      "Price": 92.5,
-      "comparePrice": 120,
+      "title": "Azzurri",
+      "slug": "azzurri",
+      "description": "Camiseta azul en honor al Inter de Milán, con detalles en dorado y un diseño que juega con distintos tonos de azules. Numero en el pecho, y el nombre en vertical. Un diseño muy original. Combina con short negro o blanco.",
+      "price": 92.5,
+      "compareprice": 120,
+      "categoryID": 2,
       "createdAt": "2023-10-11T23:28:19.349Z",
       "updatedAt": "2023-11-02T19:34:01.136Z",
       "publishedAt": "2023-10-11T23:37:19.931Z",
@@ -237,7 +376,7 @@ export const storeData = {
             "ext": ".jpeg",
             "mime": "image/jpeg",
             "size": 1474.29,
-            "url": "/uploads/shirt_blue_4d3fa4c32c.jpeg",
+            "url": "/imgs/shirt_blue.jpeg",
             "previewUrl": null,
             "provider": "local",
             "provider_metadata": null,
@@ -270,10 +409,12 @@ export const storeData = {
   }, {
     "id": 3,
     "attributes": {
-      "Title": "Borussia",
-      "Description": "Camiseta negra y amarilla, uno de los primeros modelos de Calcio. Muy linda. Cuello redondo. Dorsal y nombre en la espalda. ",
-      "Price": 65,
-      "comparePrice": 78,
+      "title": "Borussia",
+      "slug": "borussia",
+      "description": "Camiseta negra y amarilla, uno de los primeros modelos de Calcio. Muy linda. Cuello redondo. Dorsal y nombre en la espalda. ",
+      "price": 65,
+      "compareprice": 78,
+      "categoryID": 2,
       "createdAt": "2023-10-11T23:30:21.492Z",
       "updatedAt": "2023-11-02T19:34:19.598Z",
       "publishedAt": "2023-10-11T23:37:19.931Z",
@@ -336,7 +477,7 @@ export const storeData = {
             "ext": ".jpeg",
             "mime": "image/jpeg",
             "size": 1951,
-            "url": "/uploads/shirt_yellow_85555e3f31.jpeg",
+            "url": "/imgs/shirt_yellow.jpeg",
             "previewUrl": null,
             "provider": "local",
             "provider_metadata": null,
@@ -369,10 +510,12 @@ export const storeData = {
   }, {
     "id": 4,
     "attributes": {
-      "Title": "Rossoneri ",
-      "Description": "La del Milan, rojinegra. Un diseño clásico de la liga italiana. ",
-      "Price": 69.5,
-      "comparePrice": 84,
+      "title": "Rossoneri",
+      "slug": "rossoneri",
+      "description": "La del Milan, rojinegra. Un diseño clásico de la liga italiana. ",
+      "price": 69.5,
+      "compareprice": 84,
+      "categoryID": 2,
       "createdAt": "2023-10-11T23:33:13.531Z",
       "updatedAt": "2023-10-31T23:16:29.702Z",
       "publishedAt": "2023-10-11T23:37:19.931Z",
@@ -435,7 +578,7 @@ export const storeData = {
             "ext": ".jpeg",
             "mime": "image/jpeg",
             "size": 1623.34,
-            "url": "/uploads/shirt_milan_92e12fc7ce.jpeg",
+            "url": "/imgs/shirt_milan.jpeg",
             "previewUrl": null,
             "provider": "local",
             "provider_metadata": null,
@@ -468,10 +611,12 @@ export const storeData = {
   }, {
     "id": 5,
     "attributes": {
-      "Title": "Canilleras",
-      "Description": "Canilleras ",
-      "Price": 2200,
-      "comparePrice": 2400,
+      "title": "Canilleras",
+      "slug": "canilleras",
+      "description": "Canilleras ",
+      "price": 2200,
+      "compareprice": 2400,
+      "categoryID": 1,
       "createdAt": "2023-10-27T18:38:54.501Z",
       "updatedAt": "2023-11-02T19:34:24.929Z",
       "publishedAt": "2023-10-27T18:38:56.195Z",
@@ -523,7 +668,7 @@ export const storeData = {
             "ext": ".jpg",
             "mime": "image/jpeg",
             "size": 54.83,
-            "url": "/uploads/canillera3_f43d228cc1.jpg",
+            "url": "/imgs/canillera3.jpg",
             "previewUrl": null,
             "provider": "local",
             "provider_metadata": null,

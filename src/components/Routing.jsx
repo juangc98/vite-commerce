@@ -6,28 +6,29 @@ import Home from '../pages/HomePage';
 import ProductPage from '../pages/ProductPage';
 import Cart from '../pages/CartPage';
 import Contacto from '../pages/ContactPage';
-
+import ErrorPage from '../pages/ErrorPage';
+import CategoryPage from '../pages/CategoryPage.jsx';
 import Navbar from '.././components/Navbar.jsx'
 import Footer from '.././components/Footer.jsx'
 import '../App.css'
-import CategoryPage from '../pages/CategoryPage.jsx';
 
+import {storeData} from '../assets/data.js';
 const apiUrl = import.meta.env.VITE_API_URL;
 
 
 const Routing = () => {
-    // mobile menu
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const toggleMenuDrawer = () => {
-    setIsMenuOpen(!isMenuOpen);
-    // console.log("clicked", isMenuOpen);
-    };
+    //
     const [count, setCount] = useState(0)
     const [data, setData] = useState([]);
     const [categories, setCategories] = useState([]);
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
-  
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    
+    const toggleMenuDrawer = () => {
+    setIsMenuOpen(!isMenuOpen);
+    };
+    
     const getData = () => {
       /**/return new Promise((resolve, reject) => {
         setTimeout(() => {
@@ -74,19 +75,19 @@ const Routing = () => {
           setLoading(false);
         })
       }, []);
+
     return (
         <>
             <BrowserRouter>
-                <Navbar isMenuOpen={isMenuOpen} toggleMenu={toggleMenuDrawer} />
-
+                <Navbar categories={categories} isMenuOpen={isMenuOpen} toggleMenu={toggleMenuDrawer} />
                 <Routes>
-                    <Route path='/' element={<Home />} />
-                    <Route path='/productos/:categoria' element={<CategoryPage data={} />} />
-                    <Route path='/productos/:categoria/:id' element={<ProductPage />} />
+                    <Route path='/' element={<Home categories={categories} products={products} />} />
+                    <Route path='/categoria/:slug' element={<CategoryPage categories={categories} products={products} />} />
+                    <Route path='/producto/:slug' element={<ProductPage products={products} />} />
                     <Route path='/cart' element={<Cart />} />
                     <Route path='/contacto' element={<Contacto />} />
+                    <Route path='*' element={<ErrorPage />} />
                 </Routes>
-                
                 <Footer /> 
             </BrowserRouter>
         </>
