@@ -3,16 +3,16 @@ import NavList from './navSnippets/NavList.jsx'
 import Logo from './navSnippets/Logo.jsx'
 import CartWidget from './navSnippets/CartWidget.jsx'
 import MobileMenu from './navSnippets/MobileMenu.jsx'
-import icon from '../assets/basket.svg'
+import '../App.css'
 const Navbar = (props) => {
   
   return (
-    <header className='navbar fixed top-0 shadow-xl z-50 bg-white flex justify-between items-center flex-nowrap fluid-container py-4'>
+    <header className='navbar relative shadow-xl z-50 bg-white flex justify-between items-center flex-nowrap fluid-container py-4'>
         <div className='flex items-center gap-4'>
-            <MobileMenu className='md:hidden z-50' isMenuOpen={props.isMenuOpen} toggleMenu={props.toggleMenu} />
+            <MobileMenu className='md:hidden z-50' isMenuOpen={props.isMenuOpen} toggleMenu={props.toggleMenu} categories={props.categories} />
             <Logo />
             <div className='hidden md:flex'>
-              <NavList  />
+              <NavList categories={props.categories}  />
             </div>
         </div>
         <CartWidget isCartOpen={props.isCartOpen} toggleDrawer={props.toggleDrawer} />

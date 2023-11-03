@@ -1,6 +1,6 @@
 #root {
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .smooth {
@@ -10,12 +10,12 @@
 .fluid-container {
   width: 100%;
   margin: 0 auto;
-  padding: 0 0.5rem;
+  padding: 1.2rem 0.5rem;
 }
 
 @media screen and (min-width: 768px) {
   .fluid-container {
-    padding: 0 1.5rem;
+    padding: 2.5rem 1.5rem;
   }
 }
 
@@ -45,6 +45,16 @@
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
   }
+}
+
+.navbar a {
+  color: black;
+  transition: all ease-in-out .3s;
+  text-transform: capitalize;
+}
+
+.navbar a.active {
+  text-decoration: underline;
 }
 
 .card {
@@ -113,4 +123,28 @@
 .product-card .atc-btn:disabled:hover {
   outline: none;
   border: 0;
+}
+
+/**/
+.size-picker-wrapper .input-group {
+  cursor: pointer;
+}
+
+.size-picker-wrapper .input-group input + label {
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  padding: 8px;
+  font-size: 1rem;
+  font-weight: 400;
+  border-radius: 6px;
+  width: 2.5rem;
+  display: flex;
+  height: 2.5rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.size-picker-wrapper .input-group input:checked + label, .size-picker-wrapper .input-group input[checked] + label {
+  border: 1px solid white;
+  font-weight: bold;
 }

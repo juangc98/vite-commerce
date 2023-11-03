@@ -1,11 +1,12 @@
 import React from 'react'
 import calcioLogo from '/logo_calcio_negro_alpha.png'
+import { Link } from 'react-router-dom';
 const Logo = () => {
   return (
     <>
-        <a href="/" className='flex w-full max-w-[90px]  relative'>
+        <Link to="/" className='flex w-full max-w-[90px]  relative'>
             <img className='object-contain w-full h-10' src={ calcioLogo } alt="Calcio" />
-        </a>
+        </Link>
     </>
   )
 }
