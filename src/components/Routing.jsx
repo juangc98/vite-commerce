@@ -76,6 +76,19 @@ const Routing = () => {
         })
       }, []);
 
+    if ( loading ) {
+        return (
+            <div className='h-screen w-full'>
+                <div className='content-wrapper'>
+                  <div className="relative w-full h-96 z-50 overflow-hidden flex flex-col items-center justify-center">
+                    <div className="loader ease-linear rounded-full h-12 w-12 mb-4"></div>
+                    <h2 className="text-center text-white text-xl font-semibold">Loading...</h2>
+                  </div>
+                </div>
+            </div>
+        )
+    }
+
     return (
         <>
             <BrowserRouter>
