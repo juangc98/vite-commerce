@@ -4,7 +4,7 @@ const cartContext = createContext({
     name: null,
     email: null,
     isLoggedIn: false,
-    cart: [],
+    cart: []
   });
 
   export default cartContext;

@@ -1,12 +1,16 @@
-import React,{ useState } from 'react'
+import React,{ useContext } from 'react'
+import cartContext from '../../context/cartContext.js'
 import { Link } from 'react-router-dom';
 import icon from '../../assets/basket.svg'
 const CartWidget = (props) => {
+
+  const data = useContext(cartContext);
+
   return (
     <button className='btn cart-btn bg-black bg-opacity-30 p-1 relative'>
       <Link to="/cart">
         <img src={icon} className="basket w-8 h-8" alt="Basket icon" />
-        <span className='indicator p-1 absolute -top-2 -right-2 w-6 h-6 text-xs bg-black rounded-full text-white'>2</span>
+        <span className='indicator p-1 absolute -top-2 -right-2 w-6 h-6 text-xs bg-black rounded-full text-white'>{ data.cart.length }</span>
       </Link>
     </button>
   )

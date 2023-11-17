@@ -1,49 +1,67 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
+import cartContext from '../context/cartContext.js'
 
-const ItemAtc = ({size, initial, inventory, productId}) => {
-    const [qty, setQty] = useState(initial)
+const ItemAtc = ({size, inventory, productId, title, price}) => {
     const [stock, setStock] = useState(0)
     const [variant, setVariant] = useState(size)
+    const [number, setNumber] = useState(null)
+    const [name, setName] = useState(null)
+    const { cart, addToCart } = useContext(cartContext);
 
-    function addToCart() {
-        console.log("añadir:" + qty + " del producto: " + productId + " talle " + variant)
+    // Función para agregar un producto al carrito
+    function atcSubmit() {
+      console.log("añadir: 1 del producto: " + productId + " talle " + variant + " con la dorsal " + number + " y nombre " + name);
+      const newProduct = { 
+        id: productId,
+        title: title,
+        price: price,
+        size: variant,
+        name: name,
+        number: number
+      }
+      
+      addToCart(newProduct);
     }
 
     function numberValidation(e) {
-        const value = e.target.value;
-        if (value.length === 2) {
-          if (e.key !== 'Backspace' && e.key !== 'ArrowLeft' && e.key !== 'ArrowRight' && e.key !== 'Delete') {
-            e.preventDefault();
-            alert('Solo se permiten numeros del 1 a 99');
-          }
-        } else if (value.length < 2) {
-          if ( !isNaN(e.key) ) {
-            console.log(value);
-          } else if ( e.key !== 'Backspace' && e.key !== 'ArrowLeft' && e.key !== 'ArrowRight' && e.key !== 'Delete' ) {
-            e.preventDefault();
-            alert('Solo se permiten numeros del 1 a 99');
-          }
+      const value = e.target.value;
+      if (value.length === 2) {
+        if (e.key !== 'Backspace' && e.key !== 'ArrowLeft' && e.key !== 'ArrowRight' && e.key !== 'Delete') {
+          e.preventDefault();
+          alert('Solo se permiten numeros del 1 a 99');
+        }
+      } else if (value.length < 2) {
+        if ( !isNaN(e.key) ) {
+          console.log(value);
+        } else if ( e.key !== 'Backspace' && e.key !== 'ArrowLeft' && e.key !== 'ArrowRight' && e.key !== 'Delete' ) {
+          e.preventDefault();
+          alert('Solo se permiten numeros del 1 a 99');
         }
       }
+    }
 
-      function variantPicker() {
-        setVariant(document.querySelector('input[name="size-picker"]:checked').value)
-        //console.log(variant)
-      }
+    function variantPicker(e) {
+      setVariant(e.target.value)
+    }
+    function numberPicker(e) {
+      setNumber(e.target.value)
+    }
+    function namePicker(e) {
+      setName(e.target.value)
+    }
 
-      useEffect(() => {
-        for (const element of inventory) {
-          if (element.Size == variant) {
-            setStock(element.Stock)
-            //console.log(stock)
-            break;
-          }
+    useEffect(() => {
+      for (const element of inventory) {
+        if (element.Size == variant) {
+          setStock(element.Stock)
+          //console.log(stock)
+          break;
         }
-      })
-
+      }
+    })
 
     return (
-        <form>
+        <div>
             <div className='size-picker-wrapper flex flex-row gap-2 flex-nowrap justify-center mb-4 items-center z-10'>
               { inventory.map((item, index) =>
                 <div className='input-group ' key={index}>
@@ -57,9 +75,9 @@ const ItemAtc = ({size, initial, inventory, productId}) => {
             { stock > 0 ? (
                 <>
                 <div className='extra-inputs flex flex-nowrap gap-2 items-center z-10'>
-                    <input type="text" placeholder='Nombre' maxLength='15' className='p-2 rounded-md' />
-                    <input type="number" placeholder='10' max='99' className='p-2 rounded-md max-w-[62px]' onKeyDown={numberValidation} />
-                    <button className='atc-btn' onClick={() => addToCart()}>
+                    <input type="text" id='name' placeholder='Nombre' maxLength='15' className='p-2 rounded-md' onChange={namePicker} />
+                    <input type="number" id='number' placeholder='10' max='99' min='0' className='p-2 rounded-md max-w-[62px]' onKeyDown={numberValidation} onChange={numberPicker} />
+                    <button className='atc-btn' onClick={atcSubmit}>
                     +
                     </button>
                 </div>
@@ -76,7 +94,7 @@ const ItemAtc = ({size, initial, inventory, productId}) => {
                 </div>
                 </>
             )}
-        </form>
+        </div>
     )
 /*
     if ( isAvailable ) {

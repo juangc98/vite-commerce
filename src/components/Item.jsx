@@ -37,7 +37,7 @@ const ProductCards = ({product}) => {
               <h3>{ title }</h3>
             </Link>
             <h6 className='price-wrapper'>$ {price}</h6>
-            <ItemAtc inventory={Inventory}  size={variant} initial={qty} productId={product.id} />
+            <ItemAtc inventory={Inventory}  size={variant} price={price} title={title} productId={product.id} />
           </div>
         </article>
       
