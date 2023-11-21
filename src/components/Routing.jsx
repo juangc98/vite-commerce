@@ -75,15 +75,8 @@ const Routing = () => {
         })
       }, []);
 
-    if ( loading ) {
-        return (
-            <>
-                <Spinner />
-            </>
-        )
-    }
-
     return (
+      loading ? <Spinner /> :
         <>
             <BrowserRouter>
                 <Navbar categories={categories} isMenuOpen={isMenuOpen} toggleMenu={toggleMenuDrawer} />
