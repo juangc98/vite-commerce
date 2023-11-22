@@ -2,6 +2,8 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import Routing from './components/Routing.jsx'
 import cartContext from './context/cartContext.js'
+import { query, where, collection, doc, getDoc, getDocs, getFirestore } from "firebase/firestore";
+import { appFirestore } from './main.jsx'
 
 function App() {
 
@@ -21,6 +23,10 @@ function App() {
     cart: cart,
     addToCart: addToCart,
   }
+
+  useEffect(() => {
+    const db = getFirestore(appFirestore)
+  })
 
   return (
       <cartContext.Provider value={contextData}>

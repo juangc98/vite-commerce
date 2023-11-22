@@ -44,7 +44,7 @@ const NavList = ({categories}) => {
               {categories.map((category, index) => {
                 return (
                   <li key={index}>
-                    <Link to={`/categoria/${category.attributes.slug}`} >{category.attributes.title}</Link>
+                    <Link to={`/categoria/${category.slug}`} >{category.title}</Link>
                   </li>
                 );
               })}

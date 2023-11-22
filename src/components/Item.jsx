@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import ItemAtc from './ItemAtc';
 
 const ProductCards = ({product}) => {
-  const {title, price, featuredImage, Inventory} = product.attributes;
+  const {title, price, featuredImage, Inventory} = product;
   const [qty, setQty] = useState(1)
   const [variant, setVariant] = useState(Inventory[0].Size)
   const [stock, setStock] = useState(0)
@@ -27,13 +27,13 @@ const ProductCards = ({product}) => {
 
     return (
         <article className='product-card group flex flex-col w-full text-white px-5'>
-          <Link to={`/producto/${product.attributes.slug}`}>
+          <Link to={`/producto/${product.slug}`}>
             <div className='img-wrapper flex h-64 lg:h-80 bg-white p-4 rounded-lg smooth'>
-              <img className='w-full object-contain object-center transform smooth' src={`${featuredImage.data.attributes.url}`} alt={ title } />
+          
             </div>
           </Link>
           <div className="content-wrapper p-4 mt-5 flex flex-col justify-center items-center text-center gap-4">
-            <Link to={`/producto/${product.attributes.slug}`}>
+            <Link to={`/producto/${product.slug}`}>
               <h3>{ title }</h3>
             </Link>
             <h6 className='price-wrapper'>$ {price}</h6>
@@ -44,6 +44,9 @@ const ProductCards = ({product}) => {
     )
   }
 /*
+<img className='w-full object-contain object-center transform smooth' src={`${featuredImage.data.attributes.url}`} alt={ title } />
+    <img className='w-full object-contain object-center transform smooth' src={`${featuredImage.data.attributes.url}`} alt={ title } />
+
 <div className='qty-picker flex flex-nowrap gap-2 items-center'>
   <button className='minus' onClick={decrement}>-</button>
   <h4>{qty}</h4>

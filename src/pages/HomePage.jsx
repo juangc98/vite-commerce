@@ -11,11 +11,11 @@ const HomePage = ({categories, products}) => {
     <>
       <div className=''>
       {categories.map((category, index) => {
-        const filteredProducts = products.filter(product => product.attributes.categoryID === category.id);
+        const filteredProducts = products.filter(product => product.category === category.id);
         return (
           <ItemListContainer
-            key={category.id}
-            title={category.attributes.title}
+            key={index}
+            title={category.title}
             products={filteredProducts}
           />
         );

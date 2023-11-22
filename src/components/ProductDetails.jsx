@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import ItemAtc from './ItemAtc';
 
 const ProductDetails = ({product}) => {
-  const {title, description, price, Media, featuredImage, Inventory} = product.attributes;
+  const {title, description, price, Media, featuredImage, Inventory} = product;
   const [qty, setQty] = useState(1)
   const [variant, setVariant] = useState(Inventory[0].Size)
   const [stock, setStock] = useState(0)

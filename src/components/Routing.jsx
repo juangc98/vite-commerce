@@ -2,7 +2,8 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 
-import { collection, getDoc, getFirestore } from "firebase/firestore";
+import { query, where, collection, doc, getDoc, getDocs, getFirestore } from "firebase/firestore";
+import { appFirestore } from '../main.jsx'
 
 import Home from '../pages/HomePage';
 import ProductPage from '../pages/ProductPage';
@@ -15,18 +16,8 @@ import Footer from '.././components/Footer.jsx'
 import Spinner from '.././components/Spinner.jsx'
 import '../App.css'
 
-import {storeData} from '../assets/data.js';
-const apiUrl = import.meta.env.VITE_API_URL;
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBk6El6ddX27sGKSFu-olwjeFaJrJkpkAM",
-  authDomain: "calcio-ecommerce.firebaseapp.com",
-  projectId: "calcio-ecommerce",
-  storageBucket: "calcio-ecommerce.appspot.com",
-  messagingSenderId: "357598994956",
-  appId: "1:357598994956:web:5aa779a0aa3329a34f4429"
-};
-const db = getFirestore(firebase.initializeApp(firebaseConfig));
+// import {storeData} from '../assets/data.js';
+// const apiUrl = import.meta.env.VITE_API_URL;
 
 const Routing = () => {
     const [data, setData] = useState([]);
@@ -35,8 +26,7 @@ const Routing = () => {
     const [loading, setLoading] = useState(true);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    const colRef = collection(db, 'productos');
-    
+    //    
     const toggleMenuDrawer = () => {
     setIsMenuOpen(!isMenuOpen);
     };
@@ -81,16 +71,29 @@ const Routing = () => {
       })*/
     }
     const fetchFData = async () => {
-      try {
-        const querySnapshot = await getDocs(colRef);
-        const documents = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setData(documents);
-      } catch (error) {
-        console.error('Error al obtener datos de Firestore:', error);
-      }
+      const db = getFirestore(appFirestore);
+      const productsRef = collection(db, 'productos');
+      getDocs(productsRef).then((querySnapshot) => {
+        if (querySnapshot.size !== 0) {
+          const data = querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          }));
+          setProducts(data);
+          console.log(data);
+        }
+      });
+      const catRef = collection(db, 'categories');
+      getDocs(catRef).then((querySnapshot) => {
+        if (querySnapshot.size != 0) {
+          const data = querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          }))
+          setCategories(data);
+          console.log(data);
+        }
+      })
     };
     useEffect(() => {
       fetchFData()
@@ -100,6 +103,9 @@ const Routing = () => {
           setCategories(res.categories);
           setLoading(false);
         })*/
+        .finally(res => {
+          setLoading(false);
+        })
       }, []);
 
     if ( loading ) {
