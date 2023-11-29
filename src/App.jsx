@@ -22,14 +22,15 @@ function App() {
     isLoggedIn: false,
     cart: cart,
     addToCart: addToCart,
+    setCart: setCart
   }
 
   useEffect(() => {
     const db = getFirestore(appFirestore)
-  })
+  }, [])
 
   return (
-      <cartContext.Provider value={contextData}>
+      <cartContext.Provider value={{ cart, setCart }}>
         <Routing />
       </cartContext.Provider>
   );

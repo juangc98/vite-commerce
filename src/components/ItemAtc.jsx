@@ -1,15 +1,19 @@
 import React, { useState, useEffect, useContext } from 'react'
 import cartContext from '../context/cartContext.js'
-
+import { query, where, collection, doc, setDoc, addDoc, getDoc, getDocs, getFirestore, serverTimestamp } from "firebase/firestore";
+import { appFirestore } from '../main.jsx'
+ 
 const ItemAtc = ({size, inventory, productId, title, price}) => {
+    const db = getFirestore(appFirestore);
+    const ordersCollection = collection(db, 'orders');
     const [stock, setStock] = useState(0)
     const [variant, setVariant] = useState(size)
     const [number, setNumber] = useState(null)
     const [name, setName] = useState(null)
-    const { cart, addToCart } = useContext(cartContext);
+    const { cart, setCart, addToCart } = useContext(cartContext);
 
     // Función para agregar un producto al carrito
-    function atcSubmit() {
+    async function atcSubmit() {
       console.log("añadir: 1 del producto: " + productId + " talle " + variant + " con la dorsal " + number + " y nombre " + name);
       const newProduct = { 
         id: productId,
@@ -19,8 +23,28 @@ const ItemAtc = ({size, inventory, productId, title, price}) => {
         name: name,
         number: number
       }
-      
-      addToCart(newProduct);
+      setCart((prevCart) => [...prevCart, newProduct]);
+      // Crea el objeto que se almacenará en Firestore
+      const orderData = {
+        buyer: {
+          name: 'usuario',
+          email: 'usuario@example.com',
+          userId: '0002',
+          phone: '12312313',
+        },
+        items: cart,
+        timestamp: serverTimestamp(),
+        total: '1234'
+      };
+
+      // Crea un documento en la colección "orders" y permite que Firestore genere automáticamente el ID
+      addDoc(ordersCollection, orderData)
+        .then((docRef) => {
+          console.log("Documento creado con ID:", docRef.id);
+        })
+        .catch((error) => {
+          console.error("Error al crear el documento:", error);
+        });
     }
 
     function numberValidation(e) {
@@ -41,7 +65,14 @@ const ItemAtc = ({size, inventory, productId, title, price}) => {
     }
 
     function variantPicker(e) {
-      setVariant(e.target.value)
+      setVariant(e.target.value);
+      for (const element of inventory) {
+        if (element.Size == e.target.value) {
+          setStock(element.Stock)
+          //console.log(stock)
+          break;
+        }
+      }
     }
     function numberPicker(e) {
       setNumber(e.target.value)
@@ -58,11 +89,12 @@ const ItemAtc = ({size, inventory, productId, title, price}) => {
           break;
         }
       }
+
     })
 
     return (
         <div>
-            <div className='size-picker-wrapper flex flex-row gap-2 flex-nowrap justify-center mb-4 items-center z-10'>
+            <div className='size-picker-wrapper flex flex-row gap-2 flex-nowrap mb-4 items-center z-10'>
               { inventory.map((item, index) =>
                 <div className='input-group ' key={index}>
                   <input id={`size-picker-${item.Size}-${productId}`} className='hidden' name='size-picker' type='radio' value={item.Size} defaultChecked={item.Size === variant} onChange={variantPicker} />

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { initializeApp } from 'firebase/app';
 import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import App from './App.jsx';
 import './index.css';
 
@@ -26,8 +27,7 @@ export const appFirestore = initializeApp(firebaseConfig);
 //   setFirebaseApp(app);
 // }, []);
 
-// Envuelve tu aplicación con FirebaseProvider para proporcionar la instancia de Firebase
-ReactDOM.createRoot(document.getElementById('root')).render(
+createRoot(document.getElementById('root')).render(
   <React.StrictMode>
       <App />
   </React.StrictMode>,

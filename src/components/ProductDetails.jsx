@@ -28,14 +28,7 @@ const ProductDetails = ({product}) => {
     <>
       <article className='product-section-wrapper  relative h-full mx-auto product-detail group grid md:grid-cols-2 gap-10 w-full text-white mb-14'>
         <div className='media-grid grid grid-cols-2 gap-6'>
-          <div className='img-wrapper col-span-2 flex h-[60vh] md:h-[80vh] bg-white p-4 rounded-lg smooth '>
-            <img className='w-full object-contain object-center transform smooth' src={`${featuredImage.data.attributes.url}`} alt={ title } />
-          </div>
-          { Media.data.map((item, index) =>  
-            <div className='img-wrapper flex h-64 lg:h-80 bg-white p-4 rounded-lg smooth '>
-              <img className='w-full object-contain object-center transform smooth' src={`${item.attributes.url}`} alt={ title } />
-            </div>
-          )}
+
         </div>
         
         
@@ -50,4 +43,12 @@ const ProductDetails = ({product}) => {
   )
 }
 
-export default ProductDetails
+export default ProductDetails;
+/*          <div className='img-wrapper col-span-2 flex h-[60vh] md:h-[80vh] bg-white p-4 rounded-lg smooth '>
+            <img className='w-full object-contain object-center transform smooth' src={`${featuredImage.data.attributes.url}`} alt={ title } />
+          </div>
+          { Media.data.map((item, index) =>  
+            <div className='img-wrapper flex h-64 lg:h-80 bg-white p-4 rounded-lg smooth '>
+              <img className='w-full object-contain object-center transform smooth' src={`${item.attributes.url}`} alt={ title } />
+            </div>
+          )} */

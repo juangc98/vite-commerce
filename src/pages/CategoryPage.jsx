@@ -31,7 +31,7 @@ const CategoryPage = ({ categories, products }) => {
       <div className=''>
         <ItemListContainer
           key={category.id}
-          title={category.attributes.title}
+          title={category.title}
           products={filteredProducts}
         />
       </div>

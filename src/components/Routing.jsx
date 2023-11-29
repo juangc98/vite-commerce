@@ -13,7 +13,7 @@ import ErrorPage from '../pages/ErrorPage';
 import CategoryPage from '../pages/CategoryPage.jsx';
 import Navbar from '.././components/Navbar.jsx'
 import Footer from '.././components/Footer.jsx'
-import Spinner from '.././components/Spinner.jsx'
+import Spinner from './Spinner.jsx'
 import '../App.css'
 
 // import {storeData} from '../assets/data.js';
@@ -26,51 +26,12 @@ const Routing = () => {
     const [loading, setLoading] = useState(true);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    //    
     const toggleMenuDrawer = () => {
     setIsMenuOpen(!isMenuOpen);
     };
     
-    const getData = () => {
-      /**/
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          setLoading(true);
-          resolve(storeData);
-        }, 2000);
-      })
-      
-      // FETCH FOR STRAPI API IN LOCAL
-      /*fetch(apiUrl + '/api/products?&populate=*')
-          .then(res => {
-          return res.json();
-          })
-          .then(json => {
-          setProducts(json.data);
-          console.log(json.data);
-          })
-          .catch(err => {
-          console.log(err);
-          })
-          .finally(() => {
-          setLoading(false);
-          });
-      fetch(apiUrl + '/api/categories')
-          .then(res => {
-          return res.json();
-          })
-          .then(json => {
-          setCategories(json.data);
-          console.log(json.data);
-      })
-      .catch(err => {
-          console.log(err);
-      })
-      .finally(() => {
-          setLoading(false);
-      })*/
-    }
     const fetchFData = async () => {
+      setLoading(true);
       const db = getFirestore(appFirestore);
       const productsRef = collection(db, 'productos');
       getDocs(productsRef).then((querySnapshot) => {
@@ -96,13 +57,8 @@ const Routing = () => {
       })
     };
     useEffect(() => {
+      setLoading(true);
       fetchFData()
-      // getData()
-        /*.then(res => {
-          setProducts(res.products);
-          setCategories(res.categories);
-          setLoading(false);
-        })*/
         .finally(res => {
           setLoading(false);
         })
@@ -117,7 +73,7 @@ const Routing = () => {
     }
 
     return (
-        <>
+          <>
             <BrowserRouter>
                 <Navbar categories={categories} isMenuOpen={isMenuOpen} toggleMenu={toggleMenuDrawer} />
                 {data.map((item) => (

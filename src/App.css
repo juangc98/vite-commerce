@@ -125,6 +125,14 @@
   border: 0;
 }
 
+.product-card .size-picker-wrapper {
+  justify-content: center;
+}
+
+.product-section-wrapper .size-picker-wrapper {
+  justify-content: start;
+}
+
 /**/
 .size-picker-wrapper .input-group {
   cursor: pointer;

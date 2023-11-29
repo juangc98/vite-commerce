@@ -11,7 +11,7 @@ const ProductPage = ({ products }) => {
 
   useEffect(() => {
     //console.log( slug )
-    const myProduct = products.find(product => product.attributes.slug === slug);
+    const myProduct = products.find(product => product.slug === slug);
     //console.log( products )
     if (myProduct) {
       setProduct(myProduct);
@@ -29,4 +29,4 @@ const ProductPage = ({ products }) => {
   }
 };
 
-export default ProductPage;       
+export default ProductPage;
