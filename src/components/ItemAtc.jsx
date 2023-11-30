@@ -10,7 +10,7 @@ const ItemAtc = ({size, inventory, productId, title, price}) => {
     const [variant, setVariant] = useState(size)
     const [number, setNumber] = useState(null)
     const [name, setName] = useState(null)
-    const { cart, setCart, addToCart } = useContext(cartContext);
+    const { cart, setCart } = useContext(cartContext);
 
     // Función para agregar un producto al carrito
     async function atcSubmit() {
@@ -23,8 +23,22 @@ const ItemAtc = ({size, inventory, productId, title, price}) => {
         name: name,
         number: number
       }
-      setCart((prevCart) => [...prevCart, newProduct]);
-      // Crea el objeto que se almacenará en Firestore
+      setCart((prevCart) => {
+        // Si prevCart no es un array, inicialízalo como un array vacío
+        const currentCart = Array.isArray(prevCart) ? prevCart : [];
+        const updatedCart = [...currentCart, newProduct];
+        // Ejecutar tu función después de que el estado haya sido actualizado
+        handleCartUpdate(updatedCart);
+        return updatedCart;
+      });
+    }
+
+    async function handleCartUpdate(updatedCart) {
+      console.log("El carrito ha sido actualizado:", updatedCart);
+      await postDataToDatabase(updatedCart);
+    }
+
+    async function postDataToDatabase(updatedCart) {
       const orderData = {
         buyer: {
           name: 'usuario',
@@ -32,12 +46,11 @@ const ItemAtc = ({size, inventory, productId, title, price}) => {
           userId: '0002',
           phone: '12312313',
         },
-        items: cart,
+        items: updatedCart,
         timestamp: serverTimestamp(),
         total: '1234'
       };
-
-      // Crea un documento en la colección "orders" y permite que Firestore genere automáticamente el ID
+      localStorage.setItem('cart', JSON.stringify(orderData));
       addDoc(ordersCollection, orderData)
         .then((docRef) => {
           console.log("Documento creado con ID:", docRef.id);
@@ -45,6 +58,7 @@ const ItemAtc = ({size, inventory, productId, title, price}) => {
         .catch((error) => {
           console.error("Error al crear el documento:", error);
         });
+
     }
 
     function numberValidation(e) {

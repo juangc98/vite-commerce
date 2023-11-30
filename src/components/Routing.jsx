@@ -19,17 +19,16 @@ import '../App.css'
 // import {storeData} from '../assets/data.js';
 // const apiUrl = import.meta.env.VITE_API_URL;
 
-const Routing = () => {
-    const [data, setData] = useState([]);
+const Routing = ({cat, prods, isloading}) => {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [categories, setCategories] = useState([]);
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const toggleMenuDrawer = () => {
-    setIsMenuOpen(!isMenuOpen);
+      setIsMenuOpen(!isMenuOpen);
     };
-    
+
     const fetchFData = async () => {
       setLoading(true);
       const db = getFirestore(appFirestore);
@@ -56,29 +55,26 @@ const Routing = () => {
         }
       })
     };
+
     useEffect(() => {
       setLoading(true);
       fetchFData()
         .finally(res => {
           setLoading(false);
         })
-      }, []);
-
+    }, []);
+    
     if ( loading ) {
-        return (
-            <>
-                <Spinner />
-            </>
+      return (
+          <>
+              <Spinner />
+          </>
         )
     }
-
     return (
           <>
             <BrowserRouter>
                 <Navbar categories={categories} isMenuOpen={isMenuOpen} toggleMenu={toggleMenuDrawer} />
-                {data.map((item) => (
-                  <div key={item.id}>{/* Renderiza tus datos aquí */}</div>
-                ))}
                 <Routes>
                     <Route path='/' element={<Home categories={categories} products={products} />} />
                     <Route path='/categoria/:slug' element={<CategoryPage categories={categories} products={products} />} />

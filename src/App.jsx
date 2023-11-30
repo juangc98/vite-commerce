@@ -7,26 +7,40 @@ import { appFirestore } from './main.jsx'
 
 function App() {
 
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState({});
 
-  const addToCart = (product) => {
-    console.log("submit")
-    const newCart = [...cart, product];
-    console.log(newCart);
-    setCart(newCart);
+  const fetchFData = async () => {
+    const db = getFirestore(appFirestore);
+    //CAPTURE ORDER DATA
+    /*const productsRef = collection(db, 'productos');
+    getDocs(productsRef).then((querySnapshot) => {
+      if (querySnapshot.size !== 0) {
+        const data = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setProducts(data);
+      }
+    });*/
+  };
+  
+  async function loadCartData () {
+    // Intenta obtener el carrito desde localStorage
+    const localStorageCart = localStorage.getItem('cart');
+    console.log("Carrito en localStorage:", localStorageCart);
+    // Si hay datos en localStorage, utiliza esos datos
+    if (localStorageCart != null) {
+      console.log("Carrito en localStorage:", localStorageCart);
+      setCart(localStorageCart);
+    } else {
+      // Si no hay datos en localStorage, realiza una consulta a la base de datos
+      const databaseCart = await fetchFData();
+      setCart(databaseCart);
+    }
   };
 
-  const contextData = {
-    name: null,
-    email: null,
-    isLoggedIn: false,
-    cart: cart,
-    addToCart: addToCart,
-    setCart: setCart
-  }
-
   useEffect(() => {
-    const db = getFirestore(appFirestore)
+    loadCartData()
   }, [])
 
   return (
