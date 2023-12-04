@@ -2,10 +2,10 @@ import React, { useContext } from 'react'
 import cartContext from '../context/cartContext.js'
 import { Link } from 'react-router-dom';
 const CartPage = () => {
-  const data = useContext(cartContext);
+  const { cart, setCart } = useContext(cartContext);
 
   
-  if ( data.items === undefined || data.items.length == 0 ) {
+  if ( cart.items === undefined || cart.items.length == 0 ) {
     return(
     <>
     NADA
@@ -16,7 +16,7 @@ const CartPage = () => {
         <h1>Tu carrito</h1>
         <div className='p-5'>
           <ul>
-          {data.items.map((product) => (
+          {cart.items.map((product) => (
               <li key={product.id}>
                 {/* Renderizar información del producto, por ejemplo: product.title, product.price, etc. */}
                 {product.title} - ${product.price}

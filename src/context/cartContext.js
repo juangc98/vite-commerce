@@ -1,10 +1,16 @@
 import { createContext, useContext } from 'react'
 
 const cartContext = createContext({
-    name: null,
-    email: null,
+    buyer: {
+      name: '',
+      email: '',
+      userId: '',
+      phone: '',
+    },
     isLoggedIn: false,
-    cart: [],
+    items: [],
+    timestamp: '',
+    total: '',
     setCart: () => {}
   });
 

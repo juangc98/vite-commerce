@@ -3,11 +3,11 @@ import { useState, useEffect } from 'react'
 import Routing from './components/Routing.jsx'
 import cartContext from './context/cartContext.js'
 import { query, where, collection, doc, getDoc, getDocs, getFirestore } from "firebase/firestore";
-import { appFirestore } from './main.jsx'
+import { appFirestore } from './services/firebaseConfig.js'
 
 function App() {
 
-  const [cart, setCart] = useState({});
+  const [cart, setCart] = useState({buyer:{}, items:[]});
 
   const fetchFData = async () => {
     const db = getFirestore(appFirestore);
@@ -26,12 +26,17 @@ function App() {
   
   async function loadCartData () {
     // Intenta obtener el carrito desde localStorage
-    const localStorageCart = localStorage.getItem('cart');
-    console.log("Carrito en localStorage:", localStorageCart);
+    const localStorageString = localStorage.getItem('cart');
+    const localStorageData = JSON.parse(localStorageString);
+    console.log("Carrito en localStorage:", localStorageData);
     // Si hay datos en localStorage, utiliza esos datos
-    if (localStorageCart != null) {
-      console.log("Carrito en localStorage:", localStorageCart);
-      setCart(localStorageCart);
+    if (localStorageData != null) {
+      console.log(localStorageData.items)
+      console.log("Carrito en localStorage:", localStorageData);
+      setCart((prevCart) => ({
+        ...prevCart,
+        items: localStorageData.items, // Actualiza solo la propiedad 'items'
+      }));
     } else {
       // Si no hay datos en localStorage, realiza una consulta a la base de datos
       const databaseCart = await fetchFData();

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import cartContext from '../context/cartContext.js'
 import { query, where, collection, doc, setDoc, addDoc, getDoc, getDocs, getFirestore, serverTimestamp } from "firebase/firestore";
-import { appFirestore } from '../main.jsx'
+import { appFirestore } from '../services/firebaseConfig.js'
  
 const ItemAtc = ({size, inventory, productId, title, price}) => {
     const db = getFirestore(appFirestore);
@@ -14,7 +14,7 @@ const ItemAtc = ({size, inventory, productId, title, price}) => {
 
     // Función para agregar un producto al carrito
     async function atcSubmit() {
-      console.log("añadir: 1 del producto: " + productId + " talle " + variant + " con la dorsal " + number + " y nombre " + name);
+      // console.log("añadir: 1 del producto: " + productId + " talle " + variant + " con la dorsal " + number + " y nombre " + name);
       const newProduct = { 
         id: productId,
         title: title,
@@ -34,7 +34,7 @@ const ItemAtc = ({size, inventory, productId, title, price}) => {
     }
 
     async function handleCartUpdate(updatedCart) {
-      console.log("El carrito ha sido actualizado:", updatedCart);
+      // console.log("El carrito ha sido actualizado:", updatedCart);
       await postDataToDatabase(updatedCart);
     }
 
@@ -46,11 +46,12 @@ const ItemAtc = ({size, inventory, productId, title, price}) => {
           userId: '0002',
           phone: '12312313',
         },
+        isLoggedIn: false,
         items: updatedCart,
         timestamp: serverTimestamp(),
         total: '1234'
       };
-      localStorage.setItem('cart', JSON.stringify(orderData));
+      localStorage.setItem('cart', JSON.stringify(orderData.items));
       addDoc(ordersCollection, orderData)
         .then((docRef) => {
           console.log("Documento creado con ID:", docRef.id);
