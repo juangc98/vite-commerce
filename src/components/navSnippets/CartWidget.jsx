@@ -10,7 +10,7 @@ const CartWidget = (props) => {
     <button className='btn cart-btn bg-black bg-opacity-30 p-1 relative'>
       <Link to="/cart">
         <img src={icon} className="basket w-8 h-8" alt="Basket icon" />
-        <span className='indicator p-1 absolute -top-2 -right-2 w-6 h-6 text-xs bg-black rounded-full text-white'>{ cart.items.length }</span>
+        <span className='indicator p-1 absolute -top-2 -right-2 w-6 h-6 text-xs bg-black rounded-full text-white'>{ cart.length }</span>
       </Link>
     </button>
   )

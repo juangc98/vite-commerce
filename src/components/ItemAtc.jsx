@@ -51,15 +51,17 @@ const ItemAtc = ({size, inventory, productId, title, price}) => {
         timestamp: serverTimestamp(),
         total: '1234'
       };
-      localStorage.setItem('cart', JSON.stringify(orderData.items));
-      addDoc(ordersCollection, orderData)
-        .then((docRef) => {
-          console.log("Documento creado con ID:", docRef.id);
-        })
-        .catch((error) => {
-          console.error("Error al crear el documento:", error);
-        });
-
+      try {
+        const docRef = await addDoc(ordersCollection, orderData);
+        console.log("Documento creado con ID:", docRef.id);
+        const cartData = {
+          items: orderData.items,
+          docId: docRef.id
+        };
+        localStorage.setItem('cart', JSON.stringify(cartData));
+      } catch (error) {
+        console.error("Error al crear el documento:", error);
+      }
     }
 
     function numberValidation(e) {

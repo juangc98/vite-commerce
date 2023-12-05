@@ -42,8 +42,9 @@ const NavList = ({categories}) => {
         <div className='flex flex-shrink-0'>
             <ul className='flex flex-col md:flex-row flex-nowrap gap-2 text-black'>
               {categories.map((category, index) => {
+                const navClass = category.title === "Indumentaria" ? "order-first" : "";
                 return (
-                  <li key={index}>
+                  <li className={navClass} key={index}>
                     <Link to={`/categoria/${category.slug}`} >{category.title}</Link>
                   </li>
                 );
