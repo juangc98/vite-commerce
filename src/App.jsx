@@ -26,7 +26,7 @@ function App() {
   
   async function loadCartData () {
     // Intenta obtener el carrito desde localStorage
-    const localStorageString = localStorage.getItem('cart');
+    const localStorageString = localStorage.getItem('order');
     const localStorageData = JSON.parse(localStorageString);
     console.log("Carrito en localStorage:", localStorageData);
     // Si hay datos en localStorage, utiliza esos datos

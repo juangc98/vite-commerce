@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import cartContext from '../context/cartContext.js'
-import { query, where, collection, doc, setDoc, addDoc, getDoc, getDocs, getFirestore, serverTimestamp } from "firebase/firestore";
+import { query, where, collection, doc, setDoc, addDoc, getDoc, getDocs, updateDoc, getFirestore, serverTimestamp } from "firebase/firestore";
 import { appFirestore } from '../services/firebaseConfig.js'
  
 const ItemAtc = ({size, inventory, productId, title, price}) => {
@@ -14,7 +14,6 @@ const ItemAtc = ({size, inventory, productId, title, price}) => {
 
     // Función para agregar un producto al carrito
     async function atcSubmit() {
-      // console.log("añadir: 1 del producto: " + productId + " talle " + variant + " con la dorsal " + number + " y nombre " + name);
       const newProduct = { 
         id: productId,
         title: title,
@@ -25,42 +24,65 @@ const ItemAtc = ({size, inventory, productId, title, price}) => {
       }
       setCart((prevCart) => {
         // Si prevCart no es un array, inicialízalo como un array vacío
-        const currentCart = Array.isArray(prevCart) ? prevCart : [];
+        const currentCart = Array.isArray(prevCart.items) ? prevCart.items : [];
         const updatedCart = [...currentCart, newProduct];
         // Ejecutar tu función después de que el estado haya sido actualizado
-        handleCartUpdate(updatedCart);
+        handleCartUpdate(prevCart, updatedCart);
         return updatedCart;
       });
     }
 
-    async function handleCartUpdate(updatedCart) {
+    async function handleCartUpdate(prevCart, updatedCart) {
       // console.log("El carrito ha sido actualizado:", updatedCart);
-      await postDataToDatabase(updatedCart);
+      await postDataToDatabase(prevCart, updatedCart);
     }
 
-    async function postDataToDatabase(updatedCart) {
-      const orderData = {
-        buyer: {
-          name: 'usuario',
-          email: 'usuario@example.com',
-          userId: '0002',
-          phone: '12312313',
-        },
-        isLoggedIn: false,
-        items: updatedCart,
-        timestamp: serverTimestamp(),
-        total: '1234'
-      };
-      try {
-        const docRef = await addDoc(ordersCollection, orderData);
-        console.log("Documento creado con ID:", docRef.id);
-        const cartData = {
-          items: orderData.items,
-          docId: docRef.id
+    async function postDataToDatabase(prevCart, updatedCart) {
+      console.log("El carrito ha sido actualizado:", updatedCart);
+      const orderIdFromCart = prevCart.orderId; // Asegúrate de que orderId esté presente en tu objeto
+      // Verifica si ya existe una orden con el mismo ID en la base de datos
+      const orderDocRef = doc(db, "orders", orderIdFromCart);
+      const orderDocSnapshot = await getDoc(orderDocRef);
+    
+      if (orderDocSnapshot.exists()) {
+        // Si la orden ya existe... actualizo
+        const total = updatedCart.items.reduce((acc, item) => acc + item.price, 0);
+        console.log("Total:", total);
+        await updateDoc(orderDocRef, {
+          items: updatedCart.items,
+          timestamp: serverTimestamp(),
+          total: total.toString()
+        });
+        console.log("Orden actualizada con ID:", orderIdFromCart);
+      } else {
+        // Si la orden no existe... creo una
+        const orderData = {
+          buyer: {
+            name: 'usuario',
+            email: 'usuario@example.com',
+            userId: '0002',
+            phone: '12312313',
+          },
+          isLoggedIn: false,
+          items: updatedCart.items,
+          timestamp: serverTimestamp(),
+          total: '1234',
+          orderId: orderIdFromCart // Agrega el ID de la orden al objeto de datos
         };
-        localStorage.setItem('cart', JSON.stringify(cartData));
-      } catch (error) {
-        console.error("Error al crear el documento:", error);
+    
+        try {
+          const docRef = await addDoc(ordersCollection, orderData);
+          console.log("Documento creado con ID:", docRef.id);
+    
+          const cartData = {
+            buyer: orderData.buyer,
+            items: orderData.items,
+            docId: docRef.id
+          };
+          localStorage.setItem('order', JSON.stringify(cartData));
+        } catch (error) {
+          console.error("Error al crear el documento:", error);
+        }
       }
     }
 

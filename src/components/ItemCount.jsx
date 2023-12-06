@@ -27,7 +27,7 @@ const ItemCount = ({inventory, productId, title, price}) => {
     }
 
     // Función para agregar un producto al carrito
-    async function formsubmit() {
+      async function formsubmit() {
         const newProducts = Array.from({ length: qty }, () => ({
           id: productId,
           title: title,
@@ -37,20 +37,20 @@ const ItemCount = ({inventory, productId, title, price}) => {
           number: null
         }));
       
-        setCart(async (prevCart) => {
-            const currentCart = Array.isArray(prevCart) ? prevCart : [];
-            const updatedCart = [...currentCart, ...newProducts];
-            await handleCartUpdate(updatedCart);
-            return updatedCart;
+        setCart((prevCart) => {
+          const currentCart = Array.isArray(prevCart.items) ? prevCart.items : [];
+          const updatedCart = currentCart.concat(newProducts);
+          handleCartUpdate(updatedCart);
+          return { ...prevCart, items: updatedCart };
         });
       }
   
       async function handleCartUpdate(updatedCart) {
-        console.log("El carrito ha sido actualizado:", updatedCart);
         await postDataToDatabase(updatedCart);
       }
   
       async function postDataToDatabase(updatedCart) {
+        console.log("El carrito ha sido actualizado:", updatedCart);
         const orderData = {
           buyer: {
             name: 'usuario',
@@ -67,24 +67,25 @@ const ItemCount = ({inventory, productId, title, price}) => {
             const docRef = await addDoc(ordersCollection, orderData);
             console.log("Documento creado con ID:", docRef.id);
             const cartData = {
+              buyer: orderData.buyer,
               items: orderData.items,
               docId: docRef.id
             };
-            localStorage.setItem('cart', JSON.stringify(cartData));
+            localStorage.setItem('order', JSON.stringify(cartData));
           } catch (error) {
             console.error("Error al crear el documento:", error);
           }
       }
 
     /**/
-    if ( cart ) {
-        if (cart.map(item => item.id).includes(productId)) {
-            return (
-                <div>
-                    <Link to='/cart'><button className='atc-btn'>Ver carrito</button></Link>
-                </div>
-            )
-        }
+    if (cart && cart.items) {
+      if (cart.items.map(item => item.id).includes(productId)) {
+        return (
+          <div>
+            <Link to='/cart'><button className='atc-btn'>Ver carrito</button></Link>
+          </div>
+        );
+      }
     }
     return (
         <div>

@@ -39,8 +39,6 @@ const ProductDetails = ({product}) => {
               }
           </div>
         </div>
-        
-        
         <div className="content-wrapper p-5 mt-5 flex flex-col gap-4 sticky top-0 h-max">
           <h1>{title}</h1>
           <p>{ description }</p>
