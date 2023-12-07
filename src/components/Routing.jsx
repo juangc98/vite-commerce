@@ -65,7 +65,8 @@ const Routing = () => {
       loading ?  
         <>
           <Spinner />
-        </> :
+        </> 
+        :
         <>
           <BrowserRouter>
               <Navbar categories={categories} isMenuOpen={isMenuOpen} toggleMenu={toggleMenuDrawer} />
