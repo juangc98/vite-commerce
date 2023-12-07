@@ -1,15 +1,21 @@
 import React, { useState, useEffect, useContext } from 'react'
 import cartContext from '../context/cartContext.js'
-import { query, where, collection, doc, setDoc, addDoc, getDoc, getDocs, getFirestore, serverTimestamp } from "firebase/firestore";
-import { appFirestore } from '../services/firebaseConfig.js'
+import { atcSubmit } from '../context/cartFunctions.js';
 import { Link } from 'react-router-dom';
 
 const ItemCount = ({inventory, productId, title, price}) => {
-    const db = getFirestore(appFirestore);
-    const ordersCollection = collection(db, 'orders');
     const { cart, setCart } = useContext(cartContext);
     const [qty, setQty] = useState(1)
     const [stock, setStock] = useState(inventory[0].Stock)
+
+    const newProducts = Array.from({ length: qty }, () => ({
+      id: productId,
+      title: title,
+      price: price,
+      size: 'Unico',
+      name: null,
+      number: null
+    }));
 
     function increment() {
         let quantity = qty;
@@ -26,59 +32,18 @@ const ItemCount = ({inventory, productId, title, price}) => {
         }
     }
 
-    // Función para agregar un producto al carrito
-      async function formsubmit() {
-        const newProducts = Array.from({ length: qty }, () => ({
-          id: productId,
-          title: title,
-          price: price,
-          size: 'Unico',
-          name: null,
-          number: null
-        }));
-      
-        setCart((prevCart) => {
-          const currentCart = Array.isArray(prevCart.items) ? prevCart.items : [];
-          const updatedCart = currentCart.concat(newProducts);
-          handleCartUpdate(updatedCart);
-          return { ...prevCart, items: updatedCart };
-        });
+    function stockValidation() {
+      const itemsInCart = cart.items.filter(item => item.id === productId);
+      const totalInCart = itemsInCart.length;
+      // console.log(totalInCart.length + " vs " + stock);
+      if (totalInCart < stock) {
+        atcSubmit(newProducts, setCart);
+      } else {
+        alert('Ya añadiste todo el stock disponible: ' + totalInCart + '/' + stock );
       }
-  
-      async function handleCartUpdate(updatedCart) {
-        await postDataToDatabase(updatedCart);
-      }
-  
-      async function postDataToDatabase(updatedCart) {
-        console.log("El carrito ha sido actualizado:", updatedCart);
-        const orderData = {
-          buyer: {
-            name: 'usuario',
-            email: 'usuario@example.com',
-            userId: '0002',
-            phone: '12312313',
-          },
-          isLoggedIn: false,
-          items: updatedCart,
-          timestamp: serverTimestamp(),
-          total: '1234'
-        };
-        try {
-            const docRef = await addDoc(ordersCollection, orderData);
-            console.log("Documento creado con ID:", docRef.id);
-            const cartData = {
-              buyer: orderData.buyer,
-              items: orderData.items,
-              docId: docRef.id
-            };
-            localStorage.setItem('order', JSON.stringify(cartData));
-          } catch (error) {
-            console.error("Error al crear el documento:", error);
-          }
-      }
+    }
 
-    /**/
-    if (cart && cart.items) {
+    if (cart && cart.items && cart.items.length > 0 ) {
       if (cart.items.map(item => item.id).includes(productId)) {
         return (
           <div>
@@ -87,6 +52,7 @@ const ItemCount = ({inventory, productId, title, price}) => {
         );
       }
     }
+
     return (
         <div>
             <div className='qty-picker flex flex-nowrap gap-2 items-center mb-2'>
@@ -94,7 +60,7 @@ const ItemCount = ({inventory, productId, title, price}) => {
                 <h4>{qty}</h4>
                 <button className='plus' onClick={increment}>+</button>
             </div>
-            <button className='atc-btn' onClick={formsubmit}>
+            <button className='atc-btn' onClick={stockValidation}>
                 Añadir
             </button>
         </div>

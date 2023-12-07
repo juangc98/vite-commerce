@@ -1,88 +1,30 @@
 import React, { useState, useEffect, useContext } from 'react'
 import cartContext from '../context/cartContext.js'
-import { query, where, collection, doc, setDoc, addDoc, getDoc, getDocs, updateDoc, getFirestore, serverTimestamp } from "firebase/firestore";
-import { appFirestore } from '../services/firebaseConfig.js'
+import { atcSubmit } from '../context/cartFunctions.js';
  
 const ItemAtc = ({size, inventory, productId, title, price}) => {
-    const db = getFirestore(appFirestore);
-    const ordersCollection = collection(db, 'orders');
     const [stock, setStock] = useState(0)
     const [variant, setVariant] = useState(size)
     const [number, setNumber] = useState(null)
     const [name, setName] = useState(null)
     const { cart, setCart } = useContext(cartContext);
 
-    // Función para agregar un producto al carrito
-    async function atcSubmit() {
-      const newProduct = { 
-        id: productId,
-        title: title,
-        price: price,
-        size: variant,
-        name: name,
-        number: number
-      }
-      setCart((prevCart) => {
-        // Si prevCart no es un array, inicialízalo como un array vacío
-        const currentCart = Array.isArray(prevCart.items) ? prevCart.items : [];
-        const updatedCart = [...currentCart, newProduct];
-        // Ejecutar tu función después de que el estado haya sido actualizado
-        handleCartUpdate(prevCart, updatedCart);
-        return updatedCart;
-      });
+    const newProduct = { 
+      id: productId,
+      title: title,
+      price: price,
+      size: variant,
+      name: name,
+      number: number
     }
-
-    async function handleCartUpdate(prevCart, updatedCart) {
-      // console.log("El carrito ha sido actualizado:", updatedCart);
-      await postDataToDatabase(prevCart, updatedCart);
-    }
-
-    async function postDataToDatabase(prevCart, updatedCart) {
-      console.log("El carrito ha sido actualizado:", updatedCart);
-      const orderIdFromCart = prevCart.orderId; // Asegúrate de que orderId esté presente en tu objeto
-      // Verifica si ya existe una orden con el mismo ID en la base de datos
-      const orderDocRef = doc(db, "orders", orderIdFromCart);
-      const orderDocSnapshot = await getDoc(orderDocRef);
-    
-      if (orderDocSnapshot.exists()) {
-        // Si la orden ya existe... actualizo
-        const total = updatedCart.items.reduce((acc, item) => acc + item.price, 0);
-        console.log("Total:", total);
-        await updateDoc(orderDocRef, {
-          items: updatedCart.items,
-          timestamp: serverTimestamp(),
-          total: total.toString()
-        });
-        console.log("Orden actualizada con ID:", orderIdFromCart);
+    function stockValidation() {
+      const itemsInCart = cart.items.filter(item => item.id === productId && item.size === variant);
+      const totalInCart = itemsInCart.length;
+      // console.log(totalInCart.length + " vs " + stock);
+      if (totalInCart < stock) {
+        atcSubmit(newProduct, setCart);
       } else {
-        // Si la orden no existe... creo una
-        const orderData = {
-          buyer: {
-            name: 'usuario',
-            email: 'usuario@example.com',
-            userId: '0002',
-            phone: '12312313',
-          },
-          isLoggedIn: false,
-          items: updatedCart.items,
-          timestamp: serverTimestamp(),
-          total: '1234',
-          orderId: orderIdFromCart // Agrega el ID de la orden al objeto de datos
-        };
-    
-        try {
-          const docRef = await addDoc(ordersCollection, orderData);
-          console.log("Documento creado con ID:", docRef.id);
-    
-          const cartData = {
-            buyer: orderData.buyer,
-            items: orderData.items,
-            docId: docRef.id
-          };
-          localStorage.setItem('order', JSON.stringify(cartData));
-        } catch (error) {
-          console.error("Error al crear el documento:", error);
-        }
+        alert('Ya añadiste todo el stock disponible: ' + totalInCart + '/' + stock );
       }
     }
 
@@ -102,7 +44,6 @@ const ItemAtc = ({size, inventory, productId, title, price}) => {
         }
       }
     }
-
     function variantPicker(e) {
       setVariant(e.target.value);
       for (const element of inventory) {
@@ -122,14 +63,13 @@ const ItemAtc = ({size, inventory, productId, title, price}) => {
 
     useEffect(() => {
       for (const element of inventory) {
-        if (element.Size == variant) {
-          setStock(element.Stock)
-          //console.log(stock)
+        if (element.Size === variant) {
+          setStock(element.Stock);
+          // console.log(stock);
           break;
         }
       }
-
-    })
+    }, [inventory, variant]); 
 
     return (
         <div>
@@ -148,7 +88,7 @@ const ItemAtc = ({size, inventory, productId, title, price}) => {
                 <div className='extra-inputs flex flex-nowrap gap-2 items-center z-10'>
                     <input type="text" id='name' placeholder='Nombre' maxLength='15' className='p-2 rounded-md' onChange={namePicker} />
                     <input type="number" id='number' placeholder='10' max='99' min='0' className='p-2 rounded-md max-w-[62px]' onKeyDown={numberValidation} onChange={numberPicker} />
-                    <button className='atc-btn' onClick={atcSubmit}>
+                    <button className='atc-btn' onClick={stockValidation}>
                     +
                     </button>
                 </div>

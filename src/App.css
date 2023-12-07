@@ -175,3 +175,10 @@
   border-radius: 4px;
   cursor: pointer;
 }
+
+.cart-item-group .cart-item h2 {
+  display: none;
+}
+.cart-item-group .cart-item:first-of-type h2:first-of-type {
+  display: block;
+}
