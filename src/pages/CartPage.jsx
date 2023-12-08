@@ -3,14 +3,16 @@ import { query, where, collection, doc, setDoc, addDoc, getDoc, getDocs, updateD
 import { appFirestore } from '../services/firebaseConfig.js'
 import cartContext from '../context/cartContext.js'
 import { Link } from 'react-router-dom';
-import { checkoutOrder } from '../context/cartFunctions.js';
+import { checkoutOrder, postDataToDatabase } from '../context/cartFunctions.js';
 
 
 const CartPage = () => {
   const { cart, setCart } = useContext(cartContext);
-  const [user, setUser] = useState(cart.buyer);
+  const [total, setTotal] = useState(cart.total);
+  const [user, setUser] = useState(null);
   const [signup, setSignup] = useState(false);  
   const db = getFirestore(appFirestore);
+  const [ loginError, setLoginError ] = useState(false);
 
   const handleLogin = async () => {
     const email = document.getElementById('login-email').value;
@@ -22,28 +24,128 @@ const CartPage = () => {
       const userDoc = userQuerySnapshot.docs[0];
       console.log('Usuario encontrado:', userDoc.data());
       const userData = userDoc.data();
-      const localStorageData = JSON.parse(localStorage.getItem('order'));
-      const updatedOrderData = {
-        ...localStorageData,
-        buyer: {
-          name: userData.name,
-          email: userData.email,
-          userId: userDoc.id,
-          phone: userData.phone,
-        },
-        isloggedin: true
-      };
-      localStorage.setItem('order', JSON.stringify(updatedOrderData));
-      setCart((prevCart) => ({
-        ...prevCart,
-        buyer: updatedOrderData.buyer,
-        isloggedin: true
-      }));
       setUser(userData);
+      const dbOrder = await handleCartData(userData);
+      const localStorageData = JSON.parse(localStorage.getItem('order'));
+
+      console.log('dbOrder', dbOrder);
+      console.log('localStorageData', localStorageData);
+      if ( dbOrder != null && localStorageData != null && localStorageData.items != dbOrder.items ) {
+        // Pregunta al usuario si desea reemplazar el carrito actual
+        console.log('Hay datos en localStorage y en la base de datos');
+        const confirmUpdate = window.confirm('¿Quieres reemplazar tu carrito actual con la información de la cuenta?');
+        if (confirmUpdate) {
+          console.log('Se reemplazará el carrito actual');
+          const updatedOrderData = {
+            ...dbOrder,
+            buyer: {
+              name: userData.name,
+              email: userData.email,
+              userId: userDoc.id
+            },
+            isloggedin: true
+          };
+          localStorage.setItem('order', JSON.stringify(updatedOrderData));
+          console.log('updatedOrderData', updatedOrderData);
+          setCart(() => ({
+            ...updatedOrderData
+          }));
+        } else {
+          console.log('Se mantendrá el carrito actual');
+          const localOrderData = {
+            ...localStorageData,
+            buyer: {
+              name: userData.name,
+              email: userData.email,
+              userId: userDoc.id
+            },
+            isloggedin: true
+          };
+          localStorage.setItem('order', JSON.stringify(localOrderData));
+          setCart(() => ({
+            ...localOrderData
+          }));
+          postDataToDatabase(localOrderData, setCart);
+        }
+      } else if ( dbOrder != null && localStorageData == null ) {
+        console.log('No hay datos en localStorage. Si en la DB');
+        console.log(dbOrder)
+        localStorage.setItem('order', JSON.stringify(dbOrder));
+        setCart(() => ({
+          ...dbOrder
+        }));
+      } else if ( dbOrder == null && localStorageData != null ) {
+        console.log('No hay datos en la base de datos. Si en localStorage');
+        const localOrderData = {
+          ...localStorageData,
+          buyer: {
+            name: userData.name,
+            email: userData.email,
+            userId: userDoc.id
+          },
+          isloggedin: true
+        };
+        localStorage.setItem('order', JSON.stringify(localOrderData));
+        setCart(() => ({
+          ...localOrderData
+        }));
+        postDataToDatabase(localOrderData);
+      } else {
+        console.log('No hay datos en localStorage ni en la base de datos');
+        const newOrderData = {
+          buyer: {
+            name: userData.name,
+            email: userData.email,
+            userId: userDoc.id
+          },
+          items: [],
+          total: 0,
+          timestamp: serverTimestamp(),
+          status: 'open',
+          isloggedin: true
+        };
+        localStorage.setItem('order', JSON.stringify(newOrderData));
+        setCart(() => ({
+          ...newOrderData
+        }));
+      }
     } else {
-      alert('Usuario no encontrado');
+      setLoginError(true);
     }
+    
   };
+
+  async function handleCartData(userData) {
+    // Consultar todas las órdenes con el mismo buyer.email
+    console.log('userData', userData.email);
+    const matchingOrders = [];
+    // const userQuery = await getDocs(query(collection(db, "orders"), where("buyer.email", "==", userData.email)));
+    const userQuery = query(collection(db, "orders"), where("buyer.email", "==", userData.email));
+    const userQuerySnapshot = await getDocs(userQuery);
+    console.log('userQuerySnapshot', userQuerySnapshot);
+    if (!userQuerySnapshot.empty) {
+      try {
+        userQuerySnapshot.forEach((doc) => {
+          const orderData = doc.data();
+          console.log(orderData);
+          // Verifica que el estado sea "open"
+          if (orderData.status === "open") {
+            matchingOrders.push(orderData);
+          }
+        });
+        if (matchingOrders.length > 0) {
+          console.log("Matching orders:", matchingOrders);
+          return matchingOrders[0];
+        } else {
+          console.log("No hay órdenes abiertas asociadas al usuario.");
+          return null; // Puedes manejar este caso según tus necesidades
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    
+  }
 
   function logout() {
     console.log('logout');
@@ -129,7 +231,7 @@ const CartPage = () => {
                 ))}
                 <div className='flex justify-between px-6 py-2 text-xl font-bold'>
                   <h3>Total:</h3>
-                  <h4>$ {cart.total}</h4>
+                  <h4>$ {total}</h4>
                 </div>
                 <button onClick={() => checkoutOrder(setCart)} className='mt-5 flex justify-center mx-auto max-w-xs w-full bg-white bg-opacity-50 text-black text-lg'>Finalizar compra</button>
               </div>
@@ -146,7 +248,7 @@ const CartPage = () => {
         </div>
         <div className='order-first lg:order-last col-span-1'>
           <div className='flex items-center flex-col'>
-            { user && cart.buyer ? (
+            { user ? (
               <div className='w-full px-6 flex flex-col gap-5 items-center'>
                 <h2 className='text-2xl'>Bienvenido, {cart.buyer.name}!</h2>
                 { cart && cart.items.length > 0 ? 
@@ -160,6 +262,7 @@ const CartPage = () => {
                     <button className={signupClass} onClick={() => setSignup(false)}>Registrarse</button>
                     <button className={loginClass} onClick={() => setSignup(true)}>Iniciar sesión</button>
                   </h2>
+                  { loginError ? ( <p className='text-red-600 text-sm'>No se encontró un usuario con ese correo electrónico, o la contraseña no coincide</p> ) : ( <></> ) }
                   <form id='login-form' className='p-5 bg-white bg-opacity-80 text-black w-full rounded rounded-t-none'>
                     <div className='input-group'>
                       <label htmlFor="email">Email</label>

@@ -4,10 +4,9 @@ const cartContext = createContext({
     buyer: {
       name: '',
       email: '',
-      userId: '',
-      phone: '',
+      userId: ''
     },
-    isLoggedIn: false,
+    isloggedin: false,
     items: [],
     timestamp: '',
     total: '',
