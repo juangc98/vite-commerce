@@ -4,9 +4,9 @@ import ItemList from './ItemList.jsx'
 //import {storeData} from '../assets/data.js';
 
 const ItemListContainer = (props) => {
-  
+  const sectionClass = props.title === "Indumentaria" ? "section-wrapper order-first" : "section-wrapper order-last";
   return (
-    <section className='section-wrapper'>
+    <section className={sectionClass}>
         <div className='title-wrapper mb-4 flex justify-between items-center fluid-container'>
             <h2 className='text-2xl lg:text-4xl font-bold capitalize'>{props.title}</h2>
             <Button label={props.btn} textColor="white" bgColor="#000" />

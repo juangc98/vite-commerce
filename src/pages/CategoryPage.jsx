@@ -11,11 +11,11 @@ const CategoryPage = ({ categories, products }) => {
   const [filteredProducts, setFilteredProducts] = useState([]);
 
   useEffect(() => {
-    const myCategory = categories.find(cat => cat.attributes.slug === slug);
+    const myCategory = categories.find(cat => cat.slug === slug);
 
     if (myCategory) {
       setCategory(myCategory);
-      const categoryProducts = products.filter(product => product.attributes.categoryID === myCategory.id);
+      const categoryProducts = products.filter(product => product.category === myCategory.id);
       setFilteredProducts(categoryProducts);
     }
   }, [categories, products, slug]);
@@ -31,7 +31,7 @@ const CategoryPage = ({ categories, products }) => {
       <div className=''>
         <ItemListContainer
           key={category.id}
-          title={category.attributes.title}
+          title={category.title}
           products={filteredProducts}
         />
       </div>

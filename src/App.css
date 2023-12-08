@@ -125,6 +125,14 @@
   border: 0;
 }
 
+.product-card .size-picker-wrapper {
+  justify-content: center;
+}
+
+.product-section-wrapper .size-picker-wrapper {
+  justify-content: start;
+}
+
 /**/
 .size-picker-wrapper .input-group {
   cursor: pointer;
@@ -147,4 +155,34 @@
 .size-picker-wrapper .input-group input:checked + label, .size-picker-wrapper .input-group input[checked] + label {
   border: 1px solid white;
   font-weight: bold;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 6px;
+}
+
+.input-group input {
+  background-color: white;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.active-toggler {
+  background-color: rgba(255, 255, 255, 0.8);
+  color: black;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cart-item-group .cart-item h2 {
+  display: none;
+}
+.cart-item-group .cart-item:first-of-type h2:first-of-type {
+  display: block;
+}
+
+button:disabled {
+  opacity: 0.6;
 }

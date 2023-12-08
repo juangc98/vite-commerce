@@ -1,5 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
+import Hero from '../components/Hero.jsx'
 import ItemListContainer from '.././components/ItemListContainer.jsx'
 import '../App.css'
 
@@ -9,13 +10,15 @@ const HomePage = ({categories, products}) => {
  
   return (
     <>
-      <div className=''>
+      <Hero title='A la cancha con estilo Calcio.' subtitle='Todo para el fútbol. Todo para tu equipo.' cta='Ver Indumentaria' />
+      <div className='flex flex-col'>
       {categories.map((category, index) => {
-        const filteredProducts = products.filter(product => product.attributes.categoryID === category.id);
+        const filteredProducts = products.filter(product => product.category === category.id);
         return (
           <ItemListContainer
-            key={category.id}
-            title={category.attributes.title}
+            className='order-last'
+            key={index}
+            title={category.title}
             products={filteredProducts}
           />
         );
