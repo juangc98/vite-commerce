@@ -182,3 +182,7 @@
 .cart-item-group .cart-item:first-of-type h2:first-of-type {
   display: block;
 }
+
+button:disabled {
+  opacity: 0.6;
+}

@@ -107,32 +107,6 @@ const ItemAtc = ({size, inventory, productId, title, price}) => {
             )}
         </div>
     )
-/*
-    if ( isAvailable ) {
-        return (
-            <div className='extra-inputs flex flex-nowrap gap-2 items-center z-10'>
-                <input type="text" placeholder='Nombre' maxLength='15' className='p-2 rounded-md' />
-                <input type="number" placeholder='10' max='99' className='p-2 rounded-md max-w-[62px]' onKeyDown={numberValidation} />
-                <button className='atc-btn' onClick={() => addToCart()}>
-                +
-                </button>
-            </div>
-          )
-    } else {
-        return (
-            <>
-                <div className=''>
-                  <button className='atc-btn' disabled={true}>
-                    Sin Stock
-                  </button>
-                </div>
-                <div className='z-10'>
-                  <a href="#">Notificarme</a>
-                </div>
-            </>
-          )
-    } */
-
 }
 
 export default ItemAtc

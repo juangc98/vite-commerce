@@ -9,7 +9,8 @@ const Footer = () => {
             <img className='object-contain w-full h-36' src={ calcioLogo } alt="Calcio" />
         </Link>
         <div className='text-center'>
-          <p>2023 CoderHouse, React. Por Juan Gómez Carrillo</p>
+          <p>CoderHouse🚀</p>
+          <p>Juan Gómez Carrillo</p>
         </div>
     </footer>
   )

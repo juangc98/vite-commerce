@@ -2,28 +2,12 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import shirt from '../assets/shirt.svg'
 import ItemAtc from './ItemAtc';
+import ItemCount from './ItemCount';
 
 const ProductDetails = ({product}) => {
-  const {title, description, price, Media, featuredImage, Inventory} = product;
+  const {title, description, price, Media, featuredImage, Inventory, category} = product;
   const [qty, setQty] = useState(1)
   const [variant, setVariant] = useState(Inventory[0].Size)
-  const [stock, setStock] = useState(0)
-  const apiUrl = import.meta.env.VITE_API_URL;
-
-  function increment() {
-      let quantity = qty;
-      if (quantity < stock) {
-          quantity++;
-          setQty(quantity)
-      }
-  }
-  function decrement() {
-      let quantity = qty;
-      if (quantity > 1) {
-          quantity--;
-          setQty(quantity)
-      }
-  }
 
   return (
     <>
@@ -43,7 +27,12 @@ const ProductDetails = ({product}) => {
           <h1>{title}</h1>
           <p>{ description }</p>
           <h6 className='price-wrapper'>$ {price}</h6>
-          <ItemAtc inventory={Inventory}  size={variant} initial={qty} productId={product.id} />
+          { 
+          category == 'Indumentaria' ? 
+          (<ItemAtc inventory={Inventory}  size={variant} price={price} title={title} productId={product.id} />) 
+          : 
+          (<ItemCount inventory={Inventory} price={price} title={title} productId={product.id} />) 
+          }
         </div>
       </article>
     </>

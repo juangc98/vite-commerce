@@ -21,19 +21,15 @@ function App() {
 
     querySnapshot.forEach((doc) => {
       const orderData = doc.data();
-      // Verifica que el estado sea "open"
       if (orderData.status === "open") {
         matchingOrders.push(orderData);
       }
     });
-
-    // Si hay órdenes abiertas, devuelve la primera (puedes ajustar esto según tus necesidades)
     if (matchingOrders.length > 0) {
-      console.log("Matching orders:", matchingOrders);
       return matchingOrders[0];
     } else {
       console.log("No hay órdenes abiertas asociadas al usuario.");
-      return null; // Puedes manejar este caso según tus necesidades
+      return null;
     }
   };
   
@@ -41,11 +37,10 @@ function App() {
     // Intenta obtener el carrito desde localStorage
     const localStorageString = localStorage.getItem('order');
     const localStorageData = JSON.parse(localStorageString);
-    console.log("Carrito en localStorage:", localStorageData);
     // Si hay datos en localStorage, utiliza esos datos
     if (localStorageData != null) {
-      console.log(localStorageData.items)
-      console.log("Carrito en localStorage:", localStorageData);
+      // console.log(localStorageData.items)
+      // console.log("Carrito en localStorage:", localStorageData);
       if ( JSON.stringify(cart) !== JSON.stringify(localStorageData) ) {
         setCart((prevCart) => ({
           ...prevCart,
@@ -55,14 +50,11 @@ function App() {
     } else {
       // Si no hay datos en localStorage, realiza una consulta a la base de datos
       if ( cart.buyer.email != null ) {
-        console.log("Email del usuario:", cart.buyer.email);
         const userEmail = cart.buyer.email;
-        console.log("Carrito en localStorage:", localStorageData);
-        console.log("Email del usuario:", userEmail);
         const databaseCart = await fetchFData(userEmail);
         setCart(databaseCart);
       } else {
-        console.log("No hay datos en localStorage ni email del usuario.");
+        console.log("No hay datos en localStorage, ni email del usuario.");
         setCart(() => ({
           buyer: {},
           items: [],
@@ -79,7 +71,7 @@ function App() {
 
   return (
       <cartContext.Provider value={{ cart, setCart }}>
-        <Routing />
+          <Routing />
       </cartContext.Provider>
   );
 }
