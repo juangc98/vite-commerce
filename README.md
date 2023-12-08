@@ -2,6 +2,8 @@
 
 Calcio Store es un proyecto de e-commerce React creado con Vite, diseñado para ofrecer una experiencia de compra en línea de indumentaria deportiva. Este proyecto es el resultado final del curso de ReactJs en CoderHouse, donde se aplicaron los conocimientos adquiridos en clases virtuales, material de apoyo, documentación de herramientas y recursos externos, incluyendo la asistencia de ChatGPT para resolver cuestiones más complejas y recibir asistencia en los debuggings de código.
 
+Podes visitar la página con la siguiente url -> https://calciostore.netlify.app/
+
 ## Inicialización del Proyecto
 
 Este proyecto fue creado utilizando Vite.

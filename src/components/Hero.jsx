@@ -1,4 +1,6 @@
 import React from 'react'
+//pexels-markus-spiske-114296
+import heroImg from '/pexels-markus-spiske-114296.jpg'
 
 const Hero = (props) => {
 
@@ -13,8 +15,8 @@ const Hero = (props) => {
     return (
         <div className="relative bg-gradient-to-r from-purple-600 to-blue-600 h-screen text-white overflow-hidden">
             <div className="absolute inset-0">
-                <img src="https://images.unsplash.com/photo-1522252234503-e356532cafd5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHw2fHxjb2RlfGVufDB8MHx8fDE2OTQwOTg0MTZ8MA&ixlib=rb-4.0.3&q=80&w=1080" alt="Background Image" className="object-cover object-center w-full h-full" />
-                <div className="absolute inset-0 bg-black opacity-50"></div>
+                <img src={heroImg} alt="Background Image" className="object-cover object-center w-full h-full" />
+                <div className="absolute inset-0 bg-black opacity-60"></div>
             </div>
             
             <div className="relative z-10 flex flex-col justify-center items-center h-full text-center">
