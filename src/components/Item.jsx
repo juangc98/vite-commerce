@@ -21,16 +21,16 @@ const ProductCards = ({product}) => {
               }
             </div>
           </Link>
-          <div className="content-wrapper p-4 mt-5 flex flex-col justify-center items-center text-center gap-4">
+          <div className="content-wrapper p-4 mt-5 flex flex-col md:flex-row md:flex-wrap justify-center md:justify-between items-center text-center gap-4">
             <Link to={`/producto/${product.slug}`}>
-              <h3>{ title }</h3>
+              <h3 className='text-xl text-white'>{ title }</h3>
             </Link>
-            <h6 className='price-wrapper'>$ {price}</h6>
+            <h6 className='price-wrapper text-xl'>$ {price}</h6>
             {
               product.category === "indumentaria" ?
-               <ItemAtc inventory={Inventory}  size={variant} price={price} title={title} productId={product.id} />
+               <ItemAtc inventory={Inventory}  size={variant} price={price} title={title} productId={product.id} slug={product.slug} />
                :
-               <ItemCount inventory={Inventory} price={price} title={title} productId={product.id}  />
+               <ItemCount inventory={Inventory} price={price} title={title} productId={product.id} slug={product.slug} />
             }
            
           </div>

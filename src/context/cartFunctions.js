@@ -95,6 +95,7 @@ export function atcSubmit(newProduct, setCart) {
         items: updatedItems,
         total: total.toString()
       };
+      
       if (prevCart.buyer.length > 0 || prevCart.isloggedin != true) {
         updateLocalStorage(updatedCart, setCart)
       } else {
@@ -211,24 +212,59 @@ function updateDBproduct(itemId, inventoryUpdates) {
   console.log(`Stock actualizado para el producto con ID ${itemId}`);
 }
 
-export function groupItemsByIdAndSize(items) {
+export async function groupItemsByIdAndSize(items) {
   const groupedItems = {};
 
-  items.forEach(item => {
+  // Create a map to store product slugs by ID
+  const productSlugs = {};
+
+  // Function to fetch slug for a product ID
+  const fetchProductSlug = async (productId) => {
+    if (productSlugs[productId]) {
+      return productSlugs[productId];
+    }
+    
+    try {
+      const productDocRef = doc(db, "productos", productId);
+      const productDocSnapshot = await getDoc(productDocRef);
+      
+      if (productDocSnapshot.exists()) {
+        const productData = productDocSnapshot.data();
+        const slug = productData.slug || 'no-slug';
+        productSlugs[productId] = slug;
+        return slug;
+      }
+    } catch (error) {
+      console.error(`Error fetching slug for product ${productId}:`, error);
+    }
+    
+    return 'no-slug';
+  };
+
+  // Process items and fetch missing slugs
+  for (const item of items) {
     const key = item.id;
-  
+    
     if (!groupedItems[key]) {
       groupedItems[key] = {};
     }
-  
+    
     if (!groupedItems[key][item.size]) {
       const objItem = {
         size: item.size,
         name: item.name,
         number: item.number
       };
+      
+      // Get slug - use existing or fetch from database
+      let slug = item.slug;
+      if (!slug) {
+        slug = await fetchProductSlug(item.id);
+      }
+      
       groupedItems[key][item.size] = {
         id: item.id,
+        slug: slug,
         title: item.title,
         size: item.size,
         count: 1,
@@ -244,7 +280,7 @@ export function groupItemsByIdAndSize(items) {
         number: item.number
       });
     }
-  });
+  }
 
   return groupedItems;
 }
@@ -252,9 +288,8 @@ export function groupItemsByIdAndSize(items) {
 export function removeItemFromCart(item, setCart, index) {
   setCart((prevCart) => {
     const Items = Array.isArray(prevCart.items) ? prevCart.items : [];
-    const currentItems = Items.filter(cartItem => !(cartItem.id === item.id && cartItem.size === item.size));
-    console.log('currentItems', currentItems);
-    const updatedItems = currentItems.filter((cartItem, i) => i !== index);
+    // Remove the specific item at the given index
+    const updatedItems = Items.filter((cartItem, i) => i !== index);
     console.log('updatedItems', updatedItems);
     const total = updatedItems.reduce((acc, item) => acc + item.price, 0);
     const updatedCart = {
@@ -262,7 +297,15 @@ export function removeItemFromCart(item, setCart, index) {
       items: updatedItems,
       total: total.toString()
     };
-    //postDataToDatabase(updatedCart, setCart)
+    
+    // Update localStorage
+    updateLocalStorage(updatedCart, setCart);
+    
+    // Update database if user is logged in
+    if (prevCart.isloggedin && prevCart.docId) {
+      postDataToDatabase(updatedCart, setCart);
+    }
+    
     return updatedCart;
   });
 }
@@ -272,17 +315,20 @@ export function clearCart(setCart) {
     const updatedCart = {
       ...prevCart,
       items: [],
-      total: ''
+      total: '0'
     };
-    updateLocalStorage(updatedCart)
+    updateLocalStorage(updatedCart, setCart);
     return updatedCart;
   });
+  
   // delete order from database
-  const docId = JSON.parse(localStorage.getItem('order')).docId;
-  const orderDocRef = doc(db, "orders", docId);
-  updateDoc(orderDocRef, {
-    status: 'closed',
-    timestamp: serverTimestamp()
-  });
-  console.log("Order status updated to closed")
+  const orderData = JSON.parse(localStorage.getItem('order'));
+  if (orderData && orderData.docId) {
+    const orderDocRef = doc(db, "orders", orderData.docId);
+    updateDoc(orderDocRef, {
+      status: 'closed',
+      timestamp: serverTimestamp()
+    });
+    console.log("Order status updated to closed");
+  }
 }

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { query, where, collection, doc, setDoc, addDoc, getDoc, getDocs, updateDoc, getFirestore, serverTimestamp } from "firebase/firestore";
 import { appFirestore } from '../services/firebaseConfig.js'
 import cartContext from '../context/cartContext.js'
@@ -7,11 +7,11 @@ import { checkoutOrder, postDataToDatabase, groupItemsByIdAndSize, removeItemFro
 
 const CartPage = () => {
   const { cart, setCart } = useContext(cartContext);
-  const [total, setTotal] = useState(cart.total);
   const [signup, setSignup] = useState(false);  
   const db = getFirestore(appFirestore);
   const [ loginError, setLoginError ] = useState(false);
   const [ registerError, setRegisterError ] = useState(false);
+  const [groupedItems, setGroupedItems] = useState({});
 
   const handleRegister = async () => {
     const email = document.getElementById('register-email').value;
@@ -206,7 +206,19 @@ const CartPage = () => {
     // setUser({});
   }
 
-  const groupedItems = groupItemsByIdAndSize(cart.items);
+  // Update grouped items when cart changes
+  useEffect(() => {
+    const updateGroupedItems = async () => {
+      if (cart.items && cart.items.length > 0) {
+        const grouped = await groupItemsByIdAndSize(cart.items);
+        setGroupedItems(grouped);
+      } else {
+        setGroupedItems({});
+      }
+    };
+    
+    updateGroupedItems();
+  }, [cart.items]);
   const signupClass = !signup ? 'active-toggler rounded-b-none' : 'rounded-b-none';
   const loginClass = !signup ? 'rounded-b-none' : 'active-toggler rounded-b-none';
   
@@ -225,7 +237,9 @@ const CartPage = () => {
                     <div key={`group-${index}`} className='cart-item-group py-2 w-full border-b border-white first-of-type:border-t'>
                       {Object.values(group).map((sizeGroup, index) => (
                         <div key={`sizegroup-${sizeGroup.size}${index}`} className='cart-item p-2 '>
-                          <h2 className='text-2xl font-bold'>{sizeGroup.title}</h2>
+                          <Link to={`/producto/${sizeGroup.slug}`}>
+                            <h2 className='text-2xl font-bold text-white'>{sizeGroup.title}</h2>
+                          </Link>
                           <div className={`text-xl px-4 mt-1 ${sizeGroup.size}`} key={`${group.id}-${sizeGroup.size}`}>
                             <div className='flex justify-between'><h4>{sizeGroup.size}: x{sizeGroup.count}</h4> <h5> ${sizeGroup.price}</h5></div>
                             <ul className='px-4 text-base mt-2'>
@@ -233,7 +247,7 @@ const CartPage = () => {
                                 sizeGroup.items.map((item, index) => (
                                   <div className='flex justify-between' key={`item-${item.id}${index}`}>
                                     <h3>{`${item.name != null ? item.name : '(sin nombre)' } | ${item.number != null ? item.number : '(x)' } `}</h3>
-                                    <button onClick={() => removeItemFromCart(item, setCart, index)} className='text-sm h-max'>Borrar</button>
+                                    <button onClick={() => removeItemFromCart(item, setCart, index)} className='h-max btn-link link bg-transparent text-xs'>Borrar</button>
                                   </div>
                                 ))
                               }
@@ -245,7 +259,7 @@ const CartPage = () => {
                 ))}
                 <div className='flex justify-between px-6 py-2 text-xl font-bold'>
                   <h3>Total:</h3>
-                  <h4>$ {total}</h4>
+                  <h4>$ {cart.total || '0'}</h4>
                 </div>
                 <button onClick={() => checkoutOrder(cart, setCart)} className='mt-5 flex justify-center mx-auto max-w-xs w-full bg-white bg-opacity-50 text-black text-lg'>Finalizar compra</button>
               </div>

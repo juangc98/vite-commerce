@@ -1,13 +1,25 @@
-import React from 'react'
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
+import cartContext from '../context/cartContext.js'
 import shirt from '../assets/shirt.svg'
 import ItemAtc from './ItemAtc';
 import ItemCount from './ItemCount';
 
 const ProductDetails = ({product}) => {
   const {title, description, price, Media, featuredImage, Inventory, category} = product;
-  const [qty, setQty] = useState(1)
+  const [qty, setQty] = useState(1);
+  const { cart, setCart } = useContext(cartContext);
   const [variant, setVariant] = useState(Inventory[0].Size)
+
+  // Get items already in cart for this product
+  const itemsInCart = cart.items.filter(item => item.id === product.id);
+  const groupedCartItems = itemsInCart.reduce((acc, item) => {
+    const key = `${item.size}-${item.name || 'no-name'}-${item.number || 'no-number'}`;
+    if (!acc[key]) {
+      acc[key] = { ...item, count: 0 };
+    }
+    acc[key].count++;
+    return acc;
+  }, {});
 
   return (
     <>
@@ -27,11 +39,31 @@ const ProductDetails = ({product}) => {
           <h1>{title}</h1>
           <p>{ description }</p>
           <h6 className='price-wrapper'>$ {price}</h6>
+
+          {/* Show items already in cart */}
+          {Object.keys(groupedCartItems).length > 0 && (
+              <div className='bg-gray-800 bg-opacity-50 rounded-lg p-3 mb-2'>
+                <h4 className='sr-only text-sm font-semibold text-white mb-2'>Items in cart:</h4>
+                <div className='space-y-1'>
+                  {Object.values(groupedCartItems).map((item, index) => (
+                    <div key={index} className='flex justify-between items-center text-xs text-gray-300'>
+                      <span>
+                        {item.size} - {item.name || '(no name)'} - #{item.number || 'N/A'}
+                      </span>
+                      <span className='bg-gray-700 px-2 py-1 rounded text-white'>
+                        x{item.count}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          <br />
           { 
           category == 'Indumentaria' ? 
-          (<ItemAtc inventory={Inventory}  size={variant} price={price} title={title} productId={product.id} />) 
+          (<ItemAtc inventory={Inventory}  size={variant} price={price} title={title} productId={product.id} slug={product.slug} />) 
           : 
-          (<ItemCount inventory={Inventory} price={price} title={title} productId={product.id} />) 
+          (<ItemCount inventory={Inventory} price={price} title={title} productId={product.id} slug={product.slug} />) 
           }
         </div>
       </article>

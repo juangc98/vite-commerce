@@ -3,7 +3,7 @@ import cartContext from '../context/cartContext.js'
 import { atcSubmit } from '../context/cartFunctions.js';
 import { Link } from 'react-router-dom';
 
-const ItemCount = ({inventory, productId, title, price}) => {
+const ItemCount = ({inventory, productId, title, price, slug}) => {
     const { cart, setCart } = useContext(cartContext);
     const [qty, setQty] = useState(1)
     const [stock, setStock] = useState(inventory[0].Stock)
@@ -14,7 +14,8 @@ const ItemCount = ({inventory, productId, title, price}) => {
       price: price,
       size: 'Unico',
       name: null,
-      number: null
+      number: null,
+      slug: slug
     }));
 
     function increment() {
@@ -54,8 +55,8 @@ const ItemCount = ({inventory, productId, title, price}) => {
     }
 
     return (
-        <div>
-            <div className='qty-picker flex flex-nowrap gap-2 items-center mb-2'>
+        <div className='flex flex-col md:flex-row gap-2 items-center justify-between w-full'>
+            <div className='qty-picker flex flex-nowrap gap-2 items-center'>
                 <button className='minus' onClick={decrement}>-</button>
                 <h4>{qty}</h4>
                 <button className='plus' onClick={increment}>+</button>
